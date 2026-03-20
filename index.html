@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Brand Voice — Finesa Shala App</title>
+<script>
+  // Disable GA until cookie consent is given
+  var consent = localStorage.getItem('bv_cookie_consent');
+  window['ga-disable-G-0L5Y5ERGMX'] = (consent !== 'accepted');</script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-0L5Y5ERGMX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-0L5Y5ERGMX');
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,300;1,9..144,400;1,9..144,600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --forest:#0D2B1F;--forest2:#163A2A;--forest3:#1E4D38;--moss:#2D6A4F;--sage:#52B788;
+  --mint:#D8F3DC;--amber:#F4A261;--paper:#F8F6F0;--paper2:#EDE9DF;--paper3:#E4DFD4;
+  --ink:#1A1A1A;--ink2:#3A3A3A;--muted:#6B6558;--subtle:#9A9488;--white:#FFFFFF;--border:#DDD9CE;
+  --red:#C0392B;--red-bg:#FEF0EE;--red-border:#F8C5BB;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Manrope',sans-serif;background:var(--paper);color:var(--ink);line-height:1.6;font-weight:400}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:100;background:rgba(13,43,31,0.97);backdrop-filter:blur(14px);padding:0 48px}
+.nav-inner{max-width:1120px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:66px}
+.nav-logo{display:flex;align-items:center;gap:12px;cursor:pointer}
+.nav-icon{width:38px;height:38px;background:var(--sage);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.nav-sub{font-size:9.5px;font-weight:700;color:rgba(255,255,255,0.4);letter-spacing:2px;text-transform:uppercase;display:block;line-height:1.2}
+.nav-name{font-family:'Fraunces',serif;font-size:17px;font-weight:600;color:#fff;display:block;line-height:1.2}
+.nav-links{display:flex;align-items:center;gap:24px}
+.nav-link{font-size:13px;font-weight:500;color:rgba(255,255,255,0.5);cursor:pointer;transition:color 0.2s;background:none;border:none;font-family:'Manrope',sans-serif}
+.nav-link:hover{color:rgba(255,255,255,0.9)}
+.nav-user{display:flex;align-items:center;gap:10px}
+.nav-user-email{font-size:12px;color:rgba(255,255,255,0.45);font-weight:400;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.nav-signout{padding:7px 16px;background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.6);border:1px solid rgba(255,255,255,0.12);border-radius:7px;font-family:'Manrope',sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all 0.2s}
+.nav-signout:hover{background:rgba(255,255,255,0.12);color:#fff}
+.nav-cta{padding:9px 22px;background:var(--sage);color:var(--forest);border:none;border-radius:8px;font-family:'Manrope',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all 0.2s}
+.nav-cta:hover{background:#62CC9A;transform:translateY(-1px)}
+
+/* HERO */
+.hero{background:var(--forest);padding:108px 48px 96px;position:relative;overflow:hidden}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(82,183,136,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(82,183,136,0.04) 1px,transparent 1px);background-size:60px 60px;pointer-events:none}
+.hero-inner{max-width:840px;margin:0 auto;position:relative;z-index:1}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(82,183,136,0.12);border:1px solid rgba(82,183,136,0.25);border-radius:100px;padding:7px 18px;margin-bottom:40px}
+.hero-dot{width:7px;height:7px;border-radius:50%;background:var(--sage);animation:blink 2s ease-in-out infinite;flex-shrink:0}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.35}}
+.hero-badge-text{font-size:12px;font-weight:600;color:var(--sage);letter-spacing:0.8px}
+.hero-h1{font-family:'Fraunces',serif;font-size:clamp(46px,6.5vw,78px);font-weight:600;line-height:1.05;letter-spacing:-1px;color:#fff;margin-bottom:30px}
+.hero-h1 em{font-style:italic;color:var(--sage)}
+.hero-h1 span{color:var(--amber)}
+.hero-sub{font-size:17px;color:rgba(255,255,255,0.55);line-height:1.8;max-width:580px;margin-bottom:52px;font-weight:300}
+.hero-sub strong{color:rgba(255,255,255,0.85);font-weight:500}
+.hero-btns{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:16px}
+.btn-hero-main{padding:16px 34px;background:var(--sage);color:var(--forest);border:none;border-radius:10px;font-family:'Manrope',sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:all 0.2s}
+.btn-hero-main:hover{background:#62CC9A;transform:translateY(-2px);box-shadow:0 8px 24px rgba(82,183,136,0.25)}
+.btn-hero-sec{padding:16px 34px;background:transparent;color:rgba(255,255,255,0.6);border:1px solid rgba(255,255,255,0.15);border-radius:10px;font-size:14px;font-weight:500;cursor:pointer;transition:all 0.2s;font-family:'Manrope',sans-serif}
+.btn-hero-sec:hover{border-color:rgba(255,255,255,0.35);color:rgba(255,255,255,0.9)}
+.hero-footnote{font-size:12px;color:rgba(255,255,255,0.25);font-weight:300}
+.hero-plats{margin-top:64px;padding-top:40px;border-top:1px solid rgba(255,255,255,0.06)}
+.hero-plats-label{font-size:11px;font-weight:600;color:rgba(255,255,255,0.25);letter-spacing:2px;text-transform:uppercase;margin-bottom:16px}
+.hero-plats-row{display:flex;gap:10px;flex-wrap:wrap}
+.hero-plat{padding:7px 16px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:100px;font-size:12px;color:rgba(255,255,255,0.45)}
+
+/* SECTIONS */
+.sec{padding:96px 48px}
+.sec-inner{max-width:1120px;margin:0 auto}
+.sec-eyebrow{font-size:11px;font-weight:700;color:var(--moss);letter-spacing:2.5px;text-transform:uppercase;margin-bottom:14px}
+.sec-eyebrow.light{color:var(--sage)}
+.sec-title{font-family:'Fraunces',serif;font-size:clamp(30px,4vw,52px);font-weight:600;line-height:1.12;letter-spacing:-0.5px;color:var(--ink);margin-bottom:18px}
+.sec-title em{font-style:italic;color:var(--moss)}
+.sec-title.on-dark{color:#fff}
+.sec-title.on-dark em{color:var(--sage)}
+.sec-lead{font-size:16px;color:var(--muted);line-height:1.85;max-width:600px;font-weight:300}
+.sec-lead.on-dark{color:rgba(255,255,255,0.5)}
+.fw-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;margin-top:52px}
+.fw-card{background:var(--paper);border:1.5px solid var(--border);border-radius:18px;padding:30px 28px;transition:all 0.22s}
+.fw-card:hover{border-color:var(--sage);transform:translateY(-3px);box-shadow:0 10px 32px rgba(13,43,31,0.08)}
+.fw-emoji{font-size:32px;margin-bottom:18px;display:block}
+.fw-title{font-family:'Fraunces',serif;font-size:21px;font-weight:600;color:var(--ink);margin-bottom:10px}
+.fw-desc{font-size:14px;color:var(--muted);line-height:1.8;font-weight:300}
+.why-inner{max-width:1120px;margin:0 auto;display:grid;grid-template-columns:1.1fr 0.9fr;gap:80px;align-items:start}
+.why-pull{font-family:'Fraunces',serif;font-size:clamp(20px,2.5vw,30px);font-style:italic;color:#fff;line-height:1.55;margin-bottom:28px;font-weight:300;padding-left:22px;border-left:3px solid var(--sage)}
+.why-p{font-size:14.5px;color:rgba(255,255,255,0.5);line-height:1.95;font-weight:300;margin-bottom:18px}
+.why-sig{margin-top:32px;display:flex;align-items:center;gap:14px}
+.why-sig-av{width:44px;height:44px;background:var(--moss);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.why-sig-name{font-family:'Fraunces',serif;font-size:17px;font-weight:600;color:#fff}
+.why-sig-role{font-size:12px;color:rgba(255,255,255,0.35);margin-top:2px;font-weight:300}
+.stat-stack{display:flex;flex-direction:column;gap:18px}
+.stat-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:16px;padding:28px 26px;transition:border-color 0.2s}
+.stat-card:hover{border-color:rgba(82,183,136,0.3)}
+.stat-emoji{font-size:26px;margin-bottom:12px;display:block}
+.stat-num{font-family:'Fraunces',serif;font-size:48px;font-weight:600;color:#fff;line-height:1}
+.stat-num sup{font-size:22px;color:var(--sage);vertical-align:super}
+.stat-label{font-size:13px;color:rgba(255,255,255,0.4);margin-top:8px;font-weight:300;line-height:1.65}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;margin-top:52px}
+.step{background:var(--white);border:1.5px solid var(--border);border-radius:18px;padding:32px 28px;transition:all 0.22s}
+.step:hover{border-color:var(--sage);box-shadow:0 8px 28px rgba(13,43,31,0.07)}
+.step-top{display:flex;align-items:center;gap:12px;margin-bottom:22px}
+.step-num{width:40px;height:40px;background:var(--forest);color:#fff;border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-size:20px;font-weight:700;flex-shrink:0}
+.step-emoji{font-size:24px}
+.step-title{font-family:'Fraunces',serif;font-size:20px;font-weight:600;color:var(--ink);margin-bottom:10px}
+.step-desc{font-size:13.5px;color:var(--muted);line-height:1.82;font-weight:300}
+.plat-sec{background:var(--forest3);padding:96px 48px}
+.plat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin-top:52px}
+.plat-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:16px;padding:26px 22px;transition:all 0.2s}
+.plat-card:hover{background:rgba(255,255,255,0.07);border-color:rgba(82,183,136,0.3);transform:translateY(-2px)}
+.plat-emoji{font-size:28px;margin-bottom:14px;display:block}
+.plat-name{font-family:'Fraunces',serif;font-size:19px;font-weight:600;color:#fff;margin-bottom:8px}
+.plat-desc{font-size:12.5px;color:rgba(255,255,255,0.38);line-height:1.78;font-weight:300}
+.price-box{max-width:500px;margin:48px auto 0;background:var(--white);border:2px solid var(--border);border-radius:24px;overflow:hidden;box-shadow:0 12px 48px rgba(13,43,31,0.1)}
+.price-head{background:var(--forest);padding:40px 44px;text-align:center}
+.price-eyebrow{display:inline-block;background:rgba(82,183,136,0.15);color:var(--sage);font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:5px 16px;border-radius:100px;margin-bottom:22px}
+.price-amount{font-family:'Fraunces',serif;font-size:76px;font-weight:600;color:#fff;line-height:1}
+.price-amount sup{font-size:30px;color:var(--sage);vertical-align:super;font-weight:400}
+.price-period{font-size:14px;color:rgba(255,255,255,0.35);margin-top:8px;font-weight:300}
+.price-pill{display:inline-flex;align-items:center;gap:8px;margin-top:18px;background:rgba(244,162,97,0.15);border:1px solid rgba(244,162,97,0.3);border-radius:100px;padding:7px 18px;font-size:13px;font-weight:600;color:var(--amber)}
+.price-body{padding:38px 44px}
+.price-list{list-style:none;display:flex;flex-direction:column;gap:14px;margin-bottom:32px}
+.price-list li{display:flex;align-items:flex-start;gap:12px;font-size:14px;color:var(--ink2);line-height:1.55}
+.price-check{font-size:16px;flex-shrink:0}
+.btn-price{width:100%;padding:16px;background:var(--forest);color:#fff;border:none;border-radius:12px;font-family:'Manrope',sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:all 0.2s}
+.btn-price:hover{background:var(--forest3);transform:translateY(-1px);box-shadow:0 6px 20px rgba(13,43,31,0.2)}
+.price-note{text-align:center;font-size:12px;color:var(--subtle);margin-top:12px;font-weight:300}
+.faq-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:48px}
+.faq-card{background:var(--white);border:1.5px solid var(--border);border-radius:16px;padding:28px 26px;transition:border-color 0.2s}
+.faq-card:hover{border-color:var(--sage)}
+.faq-emoji{font-size:22px;margin-bottom:10px;display:block}
+.faq-q{font-family:'Fraunces',serif;font-size:19px;font-weight:600;color:var(--ink);margin-bottom:10px}
+.faq-a{font-size:13.5px;color:var(--muted);line-height:1.82;font-weight:300}
+.final{background:var(--forest);padding:100px 48px;text-align:center}
+.final-title{font-family:'Fraunces',serif;font-size:clamp(34px,5vw,62px);font-weight:600;color:#fff;line-height:1.1;letter-spacing:-0.5px;margin-bottom:24px}
+.final-title em{font-style:italic;color:var(--sage)}
+.final-sub{font-size:16px;color:rgba(255,255,255,0.42);margin-bottom:44px;line-height:1.82;font-weight:300;max-width:500px;margin-left:auto;margin-right:auto}
+.trust{display:flex;justify-content:center;gap:32px;flex-wrap:wrap;margin-top:28px}
+.trust-item{font-size:13px;color:rgba(255,255,255,0.3);font-weight:300}
+footer{background:var(--forest2);border-top:1px solid rgba(255,255,255,0.06);color:rgba(255,255,255,0.28);padding:36px 48px;text-align:center;font-size:13px;font-weight:300}
+footer strong{color:rgba(255,255,255,0.6);font-weight:600}
+
+/* ── AUTH OVERLAY ── */
+.overlay{position:fixed;inset:0;background:rgba(5,20,13,0.78);z-index:200;display:flex;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(6px)}
+.auth-box{background:var(--paper);border-radius:22px;width:100%;max-width:440px;padding:40px 36px;border:1px solid var(--border);box-shadow:0 24px 64px rgba(0,0,0,0.2)}
+.auth-logo{display:flex;align-items:center;gap:11px;margin-bottom:32px}
+.auth-icon{width:36px;height:36px;background:var(--forest);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+.auth-title{font-family:'Fraunces',serif;font-size:26px;font-weight:600;color:var(--ink);margin-bottom:6px;letter-spacing:-0.3px}
+.auth-sub{font-size:13.5px;color:var(--muted);margin-bottom:28px;font-weight:300;line-height:1.6}
+.auth-field{margin-bottom:16px}
+.auth-field label{display:block;font-size:11px;font-weight:700;color:var(--muted);margin-bottom:7px;letter-spacing:1px;text-transform:uppercase}
+.auth-field input{width:100%;padding:13px 15px;border:1.5px solid var(--border);border-radius:10px;font-family:'Manrope',sans-serif;font-size:14px;background:var(--white);color:var(--ink);outline:none;transition:border-color 0.2s}
+.auth-field input:focus{border-color:var(--moss);box-shadow:0 0 0 3px rgba(45,106,79,0.1)}
+.auth-field input::placeholder{color:#C4BFBA}
+.auth-btn{width:100%;padding:14px;background:var(--forest);color:#fff;border:none;border-radius:10px;font-family:'Manrope',sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:all 0.2s;margin-top:6px}
+.auth-btn:hover:not(:disabled){background:var(--forest3)}
+.auth-btn:disabled{background:var(--border);color:var(--subtle);cursor:not-allowed}
+.auth-err{background:var(--red-bg);border:1px solid var(--red-border);border-radius:8px;padding:10px 14px;font-size:13px;color:var(--red);margin-bottom:16px}
+.auth-ok{background:#EAF5ED;border:1px solid #88C98F;border-radius:8px;padding:10px 14px;font-size:13px;color:#2E7D32;margin-bottom:16px}
+.auth-switch{text-align:center;margin-top:20px;font-size:13px;color:var(--muted)}
+.auth-switch button{background:none;border:none;color:var(--moss);font-weight:700;cursor:pointer;font-family:'Manrope',sans-serif;font-size:13px;padding:0}
+.auth-switch button:hover{color:var(--forest)}
+.auth-forgot{text-align:right;margin-top:-8px;margin-bottom:16px}
+.auth-forgot button{background:none;border:none;color:var(--subtle);font-size:12px;cursor:pointer;font-family:'Manrope',sans-serif;transition:color 0.15s}
+.auth-forgot button:hover{color:var(--moss)}
+.auth-divider{display:flex;align-items:center;gap:12px;margin:20px 0;color:var(--subtle);font-size:12px}
+.auth-divider::before,.auth-divider::after{content:'';flex:1;height:1px;background:var(--border)}
+.auth-spinner{width:18px;height:18px;border:2px solid rgba(255,255,255,0.3);border-top-color:#fff;border-radius:50%;animation:spin 0.7s linear infinite;display:inline-block;vertical-align:middle;margin-right:8px}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── APP MODAL ── */
+.app-overlay{position:fixed;inset:0;background:rgba(5,20,13,0.75);z-index:200;display:flex;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(6px)}
+.modal{background:var(--paper);border-radius:22px;width:100%;max-width:560px;max-height:92vh;overflow-y:auto;padding:36px 32px;border:1px solid var(--border)}
+.m-logo{display:flex;align-items:center;gap:11px;margin-bottom:30px}
+.m-logo-icon{width:34px;height:34px;background:var(--forest);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.m-logo-sub{font-size:9.5px;font-weight:700;color:var(--subtle);letter-spacing:2px;text-transform:uppercase;display:block;line-height:1.2}
+.m-logo-name{font-family:'Fraunces',serif;font-weight:600;font-size:17px;color:var(--ink);display:block;line-height:1.2}
+.m-prog{display:flex;gap:5px;margin-bottom:28px}
+.m-pd{height:3px;border-radius:2px;flex:1;background:var(--border);transition:background 0.35s}
+.m-pd.active{background:var(--moss)}
+.m-pd.done{background:var(--forest)}
+.m-slabel{font-size:10px;font-weight:700;color:var(--subtle);text-transform:uppercase;letter-spacing:1.8px;margin-bottom:8px}
+.m-stitle{font-family:'Fraunces',serif;font-weight:600;font-size:27px;letter-spacing:-0.3px;margin-bottom:6px;color:var(--ink)}
+.m-ssub{color:var(--subtle);font-size:13px;line-height:1.7;margin-bottom:24px;font-weight:300}
+.m-field{margin-bottom:20px}
+.m-field label{display:block;font-size:11.5px;font-weight:700;color:var(--muted);margin-bottom:7px;letter-spacing:0.8px;text-transform:uppercase}
+.m-field input,.m-field textarea{width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:10px;font-family:'Manrope',sans-serif;font-size:13.5px;background:var(--white);color:var(--ink);outline:none;transition:border-color 0.2s;line-height:1.55}
+.m-field input:focus,.m-field textarea:focus{border-color:var(--moss);box-shadow:0 0 0 3px rgba(45,106,79,0.1)}
+.m-field textarea{resize:none}
+.m-field input::placeholder,.m-field textarea::placeholder{color:#C4BFBA}
+.m-hint{font-size:11.5px;color:var(--subtle);margin-top:5px;font-weight:300}
+.m-tone-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.m-tone{padding:12px 14px;border:1.5px solid var(--border);border-radius:10px;cursor:pointer;background:var(--white);transition:all 0.15s;text-align:left}
+.m-tone:hover{border-color:var(--sage)}
+.m-tone.sel{border-color:var(--moss);background:#F0FAF4}
+.m-tone-name{font-weight:700;font-size:13px;color:var(--ink)}
+.m-tone-desc{font-size:11px;color:var(--subtle);margin-top:2px}
+.m-tone.sel .m-tone-name{color:var(--forest)}
+.m-btn-next{width:100%;padding:14px;background:var(--forest);color:#fff;border:none;border-radius:10px;font-family:'Manrope',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all 0.15s;margin-top:4px}
+.m-btn-next:hover{background:var(--forest3)}
+.m-btn-next:disabled{background:var(--border);color:var(--subtle);cursor:not-allowed}
+.m-btn-back{background:none;border:none;color:var(--subtle);font-size:12px;cursor:pointer;padding:0;margin-bottom:16px;display:flex;align-items:center;gap:4px;font-family:'Manrope',sans-serif;transition:color 0.15s;font-weight:500}
+.m-btn-back:hover{color:var(--ink)}
+.m-btn-gen{width:100%;padding:14px;background:var(--moss);color:#fff;border:none;border-radius:10px;font-family:'Manrope',sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:all 0.2s}
+.m-btn-gen:hover:not(:disabled){background:var(--forest3);transform:translateY(-1px)}
+.m-btn-gen:disabled{background:var(--border);color:var(--subtle);cursor:not-allowed;transform:none}
+.m-error{background:var(--red-bg);border:1px solid var(--red-border);border-radius:8px;padding:10px 14px;font-size:13px;color:var(--red);margin-bottom:16px}
+.m-exs{display:flex;flex-direction:column;gap:7px;margin-bottom:18px}
+.m-ex{padding:10px 14px;background:var(--white);border:1.5px solid var(--border);border-radius:9px;cursor:pointer;font-size:13px;color:var(--muted);transition:all 0.15s;line-height:1.4;font-weight:300}
+.m-ex:hover{border-color:var(--moss);color:var(--forest);background:#F0FAF4}
+.m-or{font-size:12px;color:var(--subtle);margin-bottom:12px;text-align:center}
+.m-loading{text-align:center;padding:60px 0}
+.m-spinner{width:36px;height:36px;border:2.5px solid var(--border);border-top-color:var(--moss);border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 18px}
+.m-loading-plats{display:flex;justify-content:center;gap:12px;margin-top:18px;font-size:18px}
+.m-pc{background:var(--white);border-radius:12px;border:1.5px solid var(--border);margin-bottom:11px;overflow:hidden}
+.m-ph{display:flex;align-items:center;justify-content:space-between;padding:12px 15px;border-bottom:1px solid var(--paper2)}
+.m-pi{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
+.m-pname{font-weight:700;font-size:12.5px;margin-left:8px}
+.m-copy{padding:5px 12px;background:var(--paper);border:1px solid var(--border);border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;color:var(--muted);transition:all 0.15s;font-family:'Manrope',sans-serif}
+.m-copy:hover{background:var(--paper2)}
+.m-copy.copied{background:#E6F4EA;border-color:#88C98F;color:#2E7D32}
+.m-pb{padding:14px 15px}
+.m-pt{font-size:13px;line-height:1.82;color:var(--ink2);white-space:pre-wrap;word-break:break-word;font-weight:300}
+.m-tags{margin-top:9px;font-size:12px;color:var(--moss);line-height:1.68;word-break:break-word;font-weight:500}
+.m-tklabel{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--subtle);margin-bottom:5px;margin-top:14px}
+.m-tklabel:first-child{margin-top:0}
+.m-char{font-size:10px;color:var(--subtle);margin-left:6px}
+.m-act-row{display:flex;gap:9px;margin-bottom:20px}
+.m-btn-sec{flex:1;padding:9px;background:var(--white);border:1.5px solid var(--border);border-radius:9px;font-size:12px;font-weight:600;cursor:pointer;color:var(--ink2);transition:border-color 0.15s;font-family:'Manrope',sans-serif}
+.m-btn-sec:hover{border-color:var(--moss)}
+
+/* ── COOKIE BANNER ── */
+.cookie-banner{position:fixed;bottom:0;left:0;right:0;z-index:999;background:var(--forest);border-top:1px solid rgba(255,255,255,0.1);padding:18px 40px;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.cookie-text{font-size:13px;color:rgba(255,255,255,0.65);font-weight:300;line-height:1.6;flex:1;min-width:200px}
+.cookie-text a{color:var(--sage);text-decoration:none}
+.cookie-text a:hover{text-decoration:underline}
+.cookie-btns{display:flex;gap:10px;flex-shrink:0}
+.cookie-accept{padding:9px 22px;background:var(--sage);color:var(--forest);border:none;border-radius:8px;font-family:'Manrope',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:background 0.2s}
+.cookie-accept:hover{background:#62CC9A}
+.cookie-decline{padding:9px 18px;background:transparent;color:rgba(255,255,255,0.45);border:1px solid rgba(255,255,255,0.15);border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;transition:all 0.2s;font-family:'Manrope',sans-serif}
+.cookie-decline:hover{border-color:rgba(255,255,255,0.35);color:rgba(255,255,255,0.8)}
+  nav,footer{padding-left:20px;padding-right:20px}
+  .hero,.sec,.plat-sec,.final{padding-left:20px;padding-right:20px}
+  .why-inner{grid-template-columns:1fr}
+  .steps{grid-template-columns:1fr}
+  .faq-grid{grid-template-columns:1fr}
+  .nav-links{display:none}
+  .nav-user-email{display:none}
+}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const {useState,useEffect,useCallback}=React;
+
+const TONES=[{id:'professional',name:'Professional',desc:'Expert & authoritative'},{id:'casual',name:'Casual',desc:'Friendly & relatable'},{id:'inspiring',name:'Inspiring',desc:'Motivational & bold'},{id:'direct',name:'Direct',desc:'No-fluff & punchy'}];
+const PLATS=[{id:'linkedin',name:'LinkedIn',bg:'#E8F0F9',color:'#0A66C2',letter:'in'},{id:'instagram',name:'Instagram',bg:'#F9E8F4',color:'#C13584',letter:'◈'},{id:'twitter',name:'X / Twitter',bg:'#F0F0F0',color:'#1A1A1A',letter:'✕'},{id:'facebook',name:'Facebook',bg:'#E8EBF9',color:'#1877F2',letter:'f'},{id:'tiktok',name:'TikTok',bg:'#E0F5F4',color:'#008080',letter:'♪'}];
+const TOPICS=["3 mistakes my clients make before working with me 🎯","Behind the scenes: how we built our latest product 🔧","Why I quit my 9-5 to start this business 🚀"];
+
+async function genContent(brand,topic){
+  const ni=window.netlifyIdentity;
+  const user=ni?ni.currentUser():null;
+  const token=user?await user.jwt():null;
+
+  const prompt=`You are a world-class social media strategist. Create platform-native content:\nBRAND: ${brand.businessName}\nNICHE: ${brand.niche}\nPRODUCT: ${brand.product}\nAUDIENCE: ${brand.audience}\nTONE: ${brand.tone}\nKEYWORDS: ${brand.keywords||'none'}\nTOPIC: ${topic}\n\nLINKEDIN: Hook + 3-4 paragraphs + CTA + 5-7 hashtags separately.\nINSTAGRAM: Hook + 4-6 lines + question + 15-20 hashtags separately.\nTWITTER: Under 280 chars, max 2 hashtags.\nFACEBOOK: 120-200 words, conversational, CTA.\nTIKTOK: HOOK (3 sec), BODY (30-45 sec script), CTA (5 sec).\n\nOnly valid JSON:\n{"linkedin":{"post":"...","hashtags":"..."},"instagram":{"caption":"...","hashtags":"..."},"twitter":{"post":"..."},"facebook":{"post":"..."},"tiktok":{"hook":"...","body":"...","cta":"..."}}`;
+  const r=await fetch('/api/generate',{
+    method:'POST',
+    headers:{
+      'Content-Type':'application/json',
+      ...(token?{'Authorization':`Bearer ${token}`}:{})
+    },
+    body:JSON.stringify({messages:[{role:'user',content:prompt}]})
+  });
+  const d=await r.json();
+  if(d.error)throw new Error(d.error.message||d.error);
+  return JSON.parse(d.content[0].text.replace(/```json|```/g,'').trim());
+}
+
+function CopyBtn({text}){
+  const [c,setC]=useState(false);
+  return <button className={`m-copy ${c?'copied':''}`} onClick={()=>{navigator.clipboard.writeText(text);setC(true);setTimeout(()=>setC(false),2000)}}>{c?'✓ Copied':'Copy'}</button>;
+}
+
+function PlatCard({pid,content}){
+  const p=PLATS.find(x=>x.id===pid);
+  let main='',tags='',cp='';
+  if(pid==='linkedin'){main=content.post;tags=content.hashtags;cp=`${main}\n\n${tags}`;}
+  else if(pid==='instagram'){main=content.caption;tags=content.hashtags;cp=`${main}\n\n${tags}`;}
+  else if(pid==='twitter'){main=content.post;cp=main;}
+  else if(pid==='facebook'){main=content.post;cp=main;}
+  else if(pid==='tiktok'){cp=`HOOK:\n${content.hook}\n\nSCRIPT:\n${content.body}\n\nCTA:\n${content.cta}`;}
+  const lim={linkedin:1300,instagram:2200,twitter:280,facebook:500};
+  return(
+    <div className="m-pc">
+      <div className="m-ph">
+        <div style={{display:'flex',alignItems:'center'}}>
+          <div className="m-pi" style={{background:p.bg,color:p.color}}>{p.letter}</div>
+          <span className="m-pname" style={{color:p.color}}>{p.name}</span>
+          {main&&lim[pid]&&<span className="m-char">{main.length}/{lim[pid]}</span>}
+        </div>
+        <CopyBtn text={cp}/>
+      </div>
+      <div className="m-pb">
+        {pid==='tiktok'?(<><div className="m-tklabel">🎣 Hook — 0 to 3 sec</div><div className="m-pt">{content.hook}</div><div className="m-tklabel">🎬 Script — 30 to 45 sec</div><div className="m-pt">{content.body}</div><div className="m-tklabel">📣 CTA</div><div className="m-pt">{content.cta}</div></>):(<><div className="m-pt">{main}</div>{tags&&<div className="m-tags">{tags}</div>}</>)}
+      </div>
+    </div>
+  );
+}
+
+/* ── AUTH SCREEN ── */
+function AuthScreen({mode:initMode,onClose}){
+  const [tab,setTab]=useState(initMode||'signin');
+
+  useEffect(()=>{
+    // Open the netlify identity widget modal on the right tab
+    const ni=window.netlifyIdentity;
+    if(!ni)return;
+    setTimeout(()=>{
+      try{ ni.open(tab==='signup'?'signup':'login'); }catch(e){}
+    },50);
+  },[tab]);
+
+  return(
+    <div className="overlay" onClick={e=>{if(e.target===e.currentTarget&&onClose)onClose();}}>
+      <div className="auth-box" style={{textAlign:'center',padding:'48px 36px'}}>
+        <div className="auth-logo" style={{justifyContent:'center',marginBottom:24}}>
+          <div className="auth-icon">✍️</div>
+          <div style={{textAlign:'left'}}><span style={{fontSize:'9.5px',fontWeight:700,color:'var(--subtle)',letterSpacing:'2px',textTransform:'uppercase',display:'block',lineHeight:1.2}}>Finesa Shala App</span><span style={{fontFamily:"'Fraunces',serif",fontWeight:600,fontSize:'17px',color:'var(--ink)',display:'block',lineHeight:1.2}}>Brand Voice</span></div>
+        </div>
+        <div style={{fontSize:32,marginBottom:12}}>{tab==='signup'?'🚀':'👋'}</div>
+        <div className="auth-title" style={{marginBottom:8}}>{tab==='signup'?'Create your account':'Welcome back'}</div>
+        <div className="auth-sub" style={{marginBottom:28}}>{tab==='signup'?'A sign-up window has opened. Complete your registration there.':'A sign-in window has opened. Enter your credentials there.'}</div>
+        <div style={{display:'flex',gap:10,justifyContent:'center',flexWrap:'wrap'}}>
+          <button className="auth-btn" style={{width:'auto',padding:'12px 28px'}} onClick={()=>{try{window.netlifyIdentity.open(tab==='signup'?'signup':'login');}catch(e){}}}>{tab==='signup'?'Open sign up':'Open sign in'}</button>
+          <button className="m-btn-sec" style={{padding:'12px 20px',borderRadius:10}} onClick={onClose}>Cancel</button>
+        </div>
+        <div className="auth-switch" style={{marginTop:24}}>
+          {tab==='signin'?<>Don't have an account? <button onClick={()=>setTab('signup')}>Sign up free →</button></>:<>Already have an account? <button onClick={()=>setTab('signin')}>Sign in</button></>}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ── APP MODAL (protected) ── */
+function AppModal({user,onClose}){
+  const storageKey=`bv_brand_${user.id}`;
+  const saved=JSON.parse(localStorage.getItem(storageKey)||'{}');
+  const [step,setStep]=useState(saved.businessName?5:1);
+  const [brand,setBrand]=useState({businessName:'',niche:'',product:'',audience:'',tone:'professional',keywords:'',...saved});
+  const [topic,setTopic]=useState('');
+  const [loading,setLoading]=useState(false);
+  const [content,setContent]=useState(null);
+  const [error,setError]=useState('');
+
+  const set=f=>e=>{const v={...brand,[f]:e.target.value};setBrand(v);localStorage.setItem(storageKey,JSON.stringify(v));};
+  const setTone=t=>{const v={...brand,tone:t};setBrand(v);localStorage.setItem(storageKey,JSON.stringify(v));};
+
+  useEffect(()=>{document.body.style.overflow='hidden';return()=>{document.body.style.overflow=''}},[]);
+
+  const generate=async()=>{
+    setLoading(true);setError('');
+    try{const r=await genContent(brand,topic);setContent(r);setStep(6);}
+    catch(e){setError('Something went wrong. Please try again.');}
+    setLoading(false);
+  };
+
+  const prog=(cur)=><div className="m-prog">{[1,2,3,4].map((_,i)=><div key={i} className={`m-pd ${i+1<cur?'done':i+1===cur?'active':''}`}/>)}</div>;
+
+  const MLogo=()=>(
+    <div className="m-logo">
+      <div className="m-logo-icon">✍️</div>
+      <div><span className="m-logo-sub">Finesa Shala App</span><span className="m-logo-name">Brand Voice</span></div>
+    </div>
+  );
+
+  return(
+    <div className="app-overlay" onClick={e=>{if(e.target===e.currentTarget)onClose()}}>
+      <div className="modal">
+        {loading?(<><MLogo/><div className="m-loading"><div className="m-spinner"/><div style={{fontSize:14,color:'var(--muted)',fontWeight:500}}>✍️ Writing your content...</div><div className="m-loading-plats">💼 📸 🐦 👥 🎵</div><div style={{fontSize:12,color:'#B0ADA8',marginTop:8}}>LinkedIn · Instagram · X · Facebook · TikTok</div></div></>)
+        :step===6&&content?(<>
+          <MLogo/>
+          <div style={{fontFamily:"'Fraunces',serif",fontSize:24,fontWeight:600,color:'var(--ink)',marginBottom:4}}>🎉 Your content is ready!</div>
+          <div style={{fontSize:12,color:'var(--subtle)',marginBottom:20,fontWeight:300}}>📌 {topic}</div>
+          <div className="m-act-row">
+            <button className="m-btn-sec" onClick={()=>{setTopic('');setContent(null);setStep(5);}}>✨ New topic</button>
+            <button className="m-btn-sec" onClick={()=>{setContent(null);setStep(1);}}>✏️ Edit brand</button>
+            <button className="m-btn-sec" onClick={onClose}>✕ Close</button>
+          </div>
+          {PLATS.map(p=>content[p.id]&&<PlatCard key={p.id} pid={p.id} content={content[p.id]}/>)}
+          <button className="m-btn-gen" style={{marginTop:14}} onClick={()=>{setTopic('');setContent(null);setStep(5);}}>✨ Generate new content →</button>
+        </>)
+        :step===5?(<>
+          <MLogo/>{prog(4)}
+          <button className="m-btn-back" onClick={()=>setStep(4)}>← Back</button>
+          <div className="m-slabel">Step 4 of 4</div>
+          <div className="m-stitle">💡 What's today's topic?</div>
+          <div className="m-ssub">The more specific you are, the better the content.</div>
+          <div className="m-exs">{TOPICS.map(e=><div key={e} className="m-ex" onClick={()=>setTopic(e)}>{e}</div>)}</div>
+          <div className="m-or">— or write your own —</div>
+          <div className="m-field"><label>Your topic</label><textarea rows={4} placeholder="E.g. How we helped a client double their revenue in 90 days..." value={topic} onChange={e=>setTopic(e.target.value)}/></div>
+          {error&&<div className="m-error">⚠️ {error}</div>}
+          <button className="m-btn-gen" onClick={generate} disabled={!topic.trim()}>⚡ Generate all 5 platforms →</button>
+        </>)
+        :step===4?(<>
+          <MLogo/>{prog(3)}
+          <button className="m-btn-back" onClick={()=>setStep(3)}>← Back</button>
+          <div className="m-slabel">Step 3 of 4</div>
+          <div className="m-stitle">🎯 Who are you talking to?</div>
+          <div className="m-field"><label>Target audience</label><input type="text" placeholder="E.g. Freelance designers 25–40, small business owners in retail..." value={brand.audience} onChange={set('audience')}/><div className="m-hint">💬 Be specific — the more detail, the better the content.</div></div>
+          <div className="m-field"><label>Tone of voice</label><div className="m-tone-grid">{TONES.map(t=><div key={t.id} className={`m-tone ${brand.tone===t.id?'sel':''}`} onClick={()=>setTone(t.id)}><div className="m-tone-name">{t.name}</div><div className="m-tone-desc">{t.desc}</div></div>)}</div></div>
+          <div className="m-field"><label>Keywords <span style={{color:'#C4BFBA',fontWeight:300,textTransform:'none',letterSpacing:0}}>optional</span></label><input type="text" placeholder="growth, mindset, productivity, scaling..." value={brand.keywords} onChange={set('keywords')}/><div className="m-hint">🔑 Woven naturally into your content.</div></div>
+          <button className="m-btn-next" onClick={()=>setStep(5)} disabled={!brand.audience}>Continue →</button>
+        </>)
+        :step===3?(<>
+          <MLogo/>{prog(2)}
+          <button className="m-btn-back" onClick={()=>setStep(2)}>← Back</button>
+          <div className="m-slabel">Step 2 of 4</div>
+          <div className="m-stitle">🛍️ What do you offer?</div>
+          <div className="m-field"><label>Product or service</label><textarea rows={4} placeholder="E.g. I offer 1:1 business coaching for entrepreneurs who want to scale without burning out..." value={brand.product} onChange={set('product')}/><div className="m-hint">🗣️ Write it as you'd explain it to a friend.</div></div>
+          <div className="m-field"><label>Industry or niche</label><input type="text" placeholder="E.g. Business coaching, E-commerce, SaaS, Health & wellness..." value={brand.niche} onChange={set('niche')}/></div>
+          <button className="m-btn-next" onClick={()=>setStep(4)} disabled={!brand.product||!brand.niche}>Continue →</button>
+        </>)
+        :step===2?(<>
+          <MLogo/>{prog(1)}
+          <div className="m-slabel">Step 1 of 4</div>
+          <div className="m-stitle">👋 Set up your brand</div>
+          <div className="m-ssub">You fill this in once. Every post will be based on this — your voice, your niche, your audience.</div>
+          <div className="m-field"><label>Business or personal brand name</label><input type="text" placeholder="E.g. Studio Bloom, Alex Chen Consulting, Growthly..." value={brand.businessName} onChange={set('businessName')} autoFocus/></div>
+          <button className="m-btn-next" onClick={()=>setStep(3)} disabled={!brand.businessName}>Continue →</button>
+        </>)
+        :(<>
+          <MLogo/>
+          <div style={{fontFamily:"'Fraunces',serif",fontSize:24,fontWeight:600,color:'var(--ink)',marginBottom:8}}>Welcome, {user.email.split('@')[0]} 👋</div>
+          <div style={{fontSize:13.5,color:'var(--muted)',marginBottom:26,fontWeight:300,lineHeight:1.75}}>Your brand profile is saved. Ready to create content? 🚀</div>
+          <button className="m-btn-gen" onClick={()=>setStep(saved.businessName?5:2)}>
+            {saved.businessName?'✨ Generate new content →':'Set up my brand profile →'}
+          </button>
+          <div style={{textAlign:'center',fontSize:12,color:'var(--subtle)',marginTop:12,fontWeight:300}}>Signed in as {user.email}</div>
+        </>)}
+      </div>
+    </div>
+  );
+}
+
+/* ── COOKIE BANNER ── */
+function CookieBanner(){
+  const [visible,setVisible]=useState(()=>!localStorage.getItem('bv_cookie_consent'));
+
+  const accept=()=>{
+    localStorage.setItem('bv_cookie_consent','accepted');
+    setVisible(false);
+    // Enable Google Analytics
+    window['ga-disable-G-0L5Y5ERGMX']=false;
+  };
+
+  const decline=()=>{
+    localStorage.setItem('bv_cookie_consent','declined');
+    setVisible(false);
+    // Disable Google Analytics
+    window['ga-disable-G-0L5Y5ERGMX']=true;
+  };
+
+  if(!visible)return null;
+  return(
+    <div className="cookie-banner">
+      <div className="cookie-text">
+        🍪 We use cookies to understand how people use Brand Voice and improve the product. Analytics are only enabled with your consent. Read our <a href="/privacy.html">Privacy Policy</a>.
+      </div>
+      <div className="cookie-btns">
+        <button className="cookie-decline" onClick={decline}>Decline</button>
+        <button className="cookie-accept" onClick={accept}>Accept cookies</button>
+      </div>
+    </div>
+  );
+}
+
+/* ── MAIN APP ── */
+function App(){
+  const [user,setUser]=useState(null);
+  const [authReady,setAuthReady]=useState(false);
+  const [showAuth,setShowAuth]=useState(false);
+  const [authMode,setAuthMode]=useState('signin');
+  const [showApp,setShowApp]=useState(false);
+
+  useEffect(()=>{
+    const ni=window.netlifyIdentity;
+    if(!ni){setAuthReady(true);return;}
+    ni.on('init',u=>{setUser(u||null);setAuthReady(true);});
+    ni.on('login',u=>{setUser(u);setShowAuth(false);setShowApp(true);ni.close();});
+    ni.on('logout',()=>{setUser(null);setShowApp(false);});
+    ni.init({APIUrl:'https://brand-voice.space/.netlify/identity'});
+    return()=>{try{ni.off('init');ni.off('login');ni.off('logout');}catch(e){}};
+  },[]);
+
+  const handleAuthSuccess=(u)=>{
+    setUser(u);
+    setShowAuth(false);
+    setShowApp(true);
+  };
+
+  const openApp=()=>{
+    if(user){setShowApp(true);}
+    else{setAuthMode('signup');setShowAuth(true);}
+  };
+
+  const signOut=async()=>{
+    try{await window.netlifyIdentity.logout();}catch(e){}
+    setUser(null);
+    setShowApp(false);
+  };
+
+  return(<>
+    {/* NAV */}
+    <nav>
+      <div className="nav-inner">
+        <div className="nav-logo" onClick={()=>{setShowAuth(false);setShowApp(false);}}>
+          <div className="nav-icon">✍️</div>
+          <div><span className="nav-sub">Finesa Shala App</span><span className="nav-name">Brand Voice</span></div>
+        </div>
+        <div className="nav-links">
+          <button className="nav-link" onClick={()=>document.getElementById('how').scrollIntoView({behavior:'smooth'})}>How it works</button>
+          <button className="nav-link" onClick={()=>document.getElementById('pricing').scrollIntoView({behavior:'smooth'})}>Pricing</button>
+          <button className="nav-link" onClick={()=>document.getElementById('faq').scrollIntoView({behavior:'smooth'})}>FAQ</button>
+        </div>
+        {authReady&&(
+          user?(
+            <div className="nav-user">
+              <span className="nav-user-email">👤 {user.email}</span>
+              <button className="nav-cta" onClick={()=>setShowApp(true)}>Open app →</button>
+              <button className="nav-signout" onClick={signOut}>Sign out</button>
+            </div>
+          ):(
+            <div style={{display:'flex',gap:10}}>
+              <button className="nav-signout" onClick={()=>{setAuthMode('signin');setShowAuth(true);}}>Sign in</button>
+              <button className="nav-cta" onClick={()=>{setAuthMode('signup');setShowAuth(true);}}>Start free →</button>
+            </div>
+          )
+        )}
+      </div>
+    </nav>
+
+    {/* HERO */}
+    <section className="hero">
+      <div className="hero-grid"/>
+      <div className="hero-inner">
+        <div className="hero-badge"><div className="hero-dot"/><span className="hero-badge-text">✍️ Finesa Shala App · Brand Voice</span></div>
+        <h1 className="hero-h1">Your brand,<br/><em>posting every day</em> —<br/>without a <span>marketing team.</span></h1>
+        <p className="hero-sub">Brand Voice turns your business description into <strong>ready-to-post content</strong> for every major social platform. No agency. No guesswork. No blank screen. 🎯</p>
+        <div className="hero-btns">
+          <button className="btn-hero-main" onClick={openApp}>🚀 Try it free for 3 days</button>
+          <button className="btn-hero-sec" onClick={()=>document.getElementById('how').scrollIntoView({behavior:'smooth'})}>See how it works ↓</button>
+        </div>
+        <p className="hero-footnote">✅ No credit card required · ⏱️ 3 days free · 💳 Then €19.99/month</p>
+        <div className="hero-plats">
+          <div className="hero-plats-label">Writes for every platform</div>
+          <div className="hero-plats-row">
+            {['💼 LinkedIn','📸 Instagram','🐦 X / Twitter','👥 Facebook','🎵 TikTok Scripts'].map(p=><div key={p} className="hero-plat">{p}</div>)}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {/* FOR WHOM */}
+    <section className="sec" style={{background:'var(--white)'}}>
+      <div className="sec-inner">
+        <div className="sec-eyebrow">👥 Who it's for</div>
+        <h2 className="sec-title">Built for people with a <em>real business</em> — not a marketing degree.</h2>
+        <p className="sec-lead">You don't need to understand algorithms or hire a content team. You just need to show up consistently — Brand Voice does the writing for you. 💪</p>
+        <div className="fw-grid">
+          {[{emoji:'🧠',title:'Coaches & Consultants',desc:'You have expertise people need but spend more time thinking about what to post than actually posting. Brand Voice writes in your voice so you can focus on your clients.'},{emoji:'🛍️',title:'Small Business Owners',desc:'You run a shop, a studio, a service. Social media isn\'t your background and an agency costs too much. This is your affordable, always-on content partner.'},{emoji:'⭐',title:'Personal Brand Builders',desc:'You want to be the expert in your niche. Consistency matters but creating content for 5 platforms every week is exhausting. Let the AI carry the load.'},{emoji:'🚀',title:'Solopreneurs & Founders',desc:'You wear every hat in your business. Marketing usually gets skipped. Brand Voice keeps you visible even on your busiest days — without hiring anyone.'},{emoji:'🎨',title:'Freelancers',desc:'Whether you\'re a designer, photographer or writer — your work should speak for itself online. Attract clients without becoming a full-time content creator.'},{emoji:'🌱',title:'Early-Stage Startups',desc:'You have a great product but no marketing budget. Consistent social presence builds trust and awareness — now create it in minutes, not hours.'}].map(c=>(
+            <div key={c.title} className="fw-card"><span className="fw-emoji">{c.emoji}</span><div className="fw-title">{c.title}</div><div className="fw-desc">{c.desc}</div></div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    {/* WHY */}
+    <section className="sec" style={{background:'var(--forest2)'}}>
+      <div className="why-inner">
+        <div>
+          <div className="sec-eyebrow light">💬 Why I built this</div>
+          <div className="why-pull">I kept watching talented people stay invisible online — not because they had nothing to say, but because they didn't know how to say it.</div>
+          <p className="why-p">I built Brand Voice because I saw the same pattern over and over: brilliant coaches 🧠, passionate founders 🚀, skilled freelancers 🎨 — all struggling to show up on social media. Not because they lacked expertise. Because content creation takes time, skill and energy they simply didn't have.</p>
+          <p className="why-p">Hiring a social media manager costs €1,500 to €5,000 a month 💸. Agencies charge more. Generic AI tools produce generic content that sounds like everyone else. None of that helped the small business owner working alone.</p>
+          <p className="why-p">So I built the tool I wished existed. One that learns your brand once and writes platform-native content every time you need it. For €19.99 a month. ✅</p>
+          <div className="why-sig"><div className="why-sig-av">👩‍💻</div><div><div className="why-sig-name">Finesa Shala</div><div className="why-sig-role">Founder, Brand Voice</div></div></div>
+        </div>
+        <div className="stat-stack">
+          {[{e:'📱',n:'5',sup:'×',l:'Platforms covered in one generation — LinkedIn, Instagram, X, Facebook and TikTok scripts.'},{e:'⚡',n:'2',sup:'min',l:'Average time from setup to your first ready-to-post content. No learning curve, no tutorials.'},{e:'💰',n:'€19',sup:'.99',l:'Per month after your free trial. Less than one freelance post. Cancel anytime.'}].map(s=>(
+            <div key={s.n} className="stat-card"><span className="stat-emoji">{s.e}</span><div className="stat-num">{s.n}<sup>{s.sup}</sup></div><div className="stat-label">{s.l}</div></div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    {/* HOW */}
+    <section className="sec" id="how" style={{background:'var(--paper2)'}}>
+      <div className="sec-inner">
+        <div className="sec-eyebrow">⚙️ How it works</div>
+        <h2 className="sec-title">Three steps. <em>Five platforms.</em> Minutes.</h2>
+        <div className="steps">
+          {[{n:'1',e:'📋',t:'Set up your brand profile',d:'Tell us your business name, what you offer, who your audience is and your tone. You do this once. Every post will sound like you — not a template. Your profile is saved automatically. 🎯'},{n:'2',e:'💡',t:'Give us a topic or idea',d:'Choose from suggested prompts or write your own — a lesson learned, a client story, a product feature. The more specific you are, the better the output. ✍️'},{n:'3',e:'⚡',t:'Get 5 posts instantly',d:'We write LinkedIn, Instagram, X, Facebook and TikTok — all from the same topic, each optimised for how that platform works. Copy, paste, post. Done. 🎉'}].map(s=>(
+            <div key={s.n} className="step"><div className="step-top"><div className="step-num">{s.n}</div><span className="step-emoji">{s.e}</span></div><div className="step-title">{s.t}</div><div className="step-desc">{s.d}</div></div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    {/* PLATFORMS */}
+    <section className="plat-sec">
+      <div className="sec-inner">
+        <div className="sec-eyebrow light">📱 What you get</div>
+        <h2 className="sec-title on-dark">Every platform has its <em>own rules.</em> We know them all.</h2>
+        <p className="sec-lead on-dark">A LinkedIn post that works is nothing like an Instagram caption. We write each one the way that platform rewards — so your content gets seen. 👀</p>
+        <div className="plat-grid">
+          {[{e:'💼',n:'LinkedIn',d:'Hook + 3–4 value paragraphs + CTA. 5–7 niche hashtags. Written to drive profile views and connections.'},{e:'📸',n:'Instagram',d:'Punchy caption with 15–20 hashtags (broad, niche, micro). Ends with a question to trigger comments.'},{e:'🐦',n:'X / Twitter',d:'Under 280 characters, max 2 hashtags. Sharp and opinionated — built to be shared and drive follows.'},{e:'👥',n:'Facebook',d:'Community-first tone, 120–200 words. Opens with a relatable question. Drives comments and shares.'},{e:'🎵',n:'TikTok Script',d:'Three-part script: 3-second hook, 30–45 second body, 5-second CTA. Ready to film.'}].map(p=>(
+            <div key={p.n} className="plat-card"><span className="plat-emoji">{p.e}</span><div className="plat-name">{p.n}</div><div className="plat-desc">{p.d}</div></div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    {/* PRICING */}
+    <section className="sec" id="pricing">
+      <div className="sec-inner" style={{textAlign:'center'}}>
+        <div className="sec-eyebrow" style={{display:'block'}}>💳 Pricing</div>
+        <h2 className="sec-title">Affordable for everyone. <em>Powerful for anyone.</em></h2>
+        <p className="sec-lead" style={{margin:'0 auto'}}>One plan. Everything included. No hidden fees, no usage limits. 🙌</p>
+        <div className="price-box">
+          <div className="price-head">
+            <div className="price-eyebrow">✅ Everything included</div>
+            <div className="price-amount"><sup>€</sup>19.99</div>
+            <div className="price-period">per month · billed monthly</div>
+            <div className="price-pill">🎁 First 3 days free — no card needed</div>
+          </div>
+          <div className="price-body">
+            <ul className="price-list">
+              {[['⚡','Unlimited content generations'],['📱','All 5 platforms: LinkedIn, Instagram, X, Facebook, TikTok'],['💾','Saved brand profile — set up once, use forever'],['🎯','Platform-native formatting and hashtag strategy'],['🎵','TikTok video scripts included'],['🔄','New platforms and features added regularly'],['🔐','Secure account — your data is always yours'],['🚫','Cancel anytime — no contracts, no questions']].map(([e,f])=><li key={f}><span className="price-check">{e}</span>{f}</li>)}
+            </ul>
+            <button className="btn-price" onClick={openApp}>🚀 Start my free 3-day trial →</button>
+            <p className="price-note">No credit card required · After 3 days, €19.99/month · Cancel anytime</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {/* FAQ */}
+    <section className="sec" id="faq" style={{background:'var(--paper2)'}}>
+      <div className="sec-inner">
+        <div className="sec-eyebrow">❓ FAQ</div>
+        <h2 className="sec-title">Questions people ask <em>before signing up.</em></h2>
+        <div className="faq-grid">
+          {[{e:'🎓',q:'Do I need marketing experience?',a:'None at all. Brand Voice is designed for people with zero marketing background. Fill in a simple form about your business and we handle the rest.'},{e:'🎙️',q:'Will the content sound like me?',a:'Yes — it\'s built on your brand profile. The app uses your niche, audience, tone and keywords to write content that sounds like you, not a generic AI template.'},{e:'💳',q:'Do I need a credit card for the trial?',a:'No. Sign up and use Brand Voice for 3 full days without any payment details. Only when your trial ends will you be asked to subscribe at €19.99/month.'},{e:'🔐',q:'Is my data secure?',a:'Yes. Your account is protected by Netlify Identity — the same infrastructure used by thousands of professional applications. Your brand profile is private to your account.'},{e:'🤖',q:'How is this different from ChatGPT?',a:'General AI tools write generic content and don\'t know your brand or platform rules. Brand Voice holds your profile and writes content that fits LinkedIn vs TikTok vs Instagram specifically.'},{e:'🔓',q:'Can I cancel anytime?',a:'Yes, absolutely. No contracts, no cancellation fees. Cancel at any time and you\'ll keep access until the end of your billing period.'}].map(f=>(
+            <div key={f.q} className="faq-card"><span className="faq-emoji">{f.e}</span><div className="faq-q">{f.q}</div><div className="faq-a">{f.a}</div></div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    {/* FINAL CTA */}
+    <section className="final">
+      <div className="final-title">Stop thinking about<br/>what to post.<br/><em>Start posting. 🚀</em></div>
+      <p className="final-sub">3 days free. No credit card. Brand profile set up in 2 minutes. Content for all 5 platforms in seconds. ⚡</p>
+      <div style={{display:'flex',justifyContent:'center',marginBottom:32}}>
+        <button className="btn-hero-main" style={{fontSize:16,padding:'17px 40px'}} onClick={openApp}>🚀 Start my free trial →</button>
+      </div>
+      <div className="trust">
+        {['✅ No credit card','⏱️ 3 days free','💳 €19.99/month after','🔓 Cancel anytime','🔐 Secure account'].map(t=><div key={t} className="trust-item">{t}</div>)}
+      </div>
+    </section>
+
+    <footer>
+      <strong>✍️ Finesa Shala App — Brand Voice</strong><br/>
+      <span style={{marginTop:8,display:'block'}}>Built for creators, coaches and small businesses who deserve to be seen. 🌱</span>
+      <div style={{marginTop:16,display:'flex',justifyContent:'center',gap:24,flexWrap:'wrap'}}>
+        <a href="/privacy.html" style={{color:'rgba(255,255,255,0.35)',fontSize:12,textDecoration:'none'}}>Privacy Policy</a>
+        <a href="/terms.html" style={{color:'rgba(255,255,255,0.35)',fontSize:12,textDecoration:'none'}}>Terms of Service</a>
+        <a href="mailto:support@brandvoice.app" style={{color:'rgba(255,255,255,0.35)',fontSize:12,textDecoration:'none'}}>Contact</a>
+      </div>
+    </footer>
+
+    {showAuth&&<AuthScreen mode={authMode} onClose={()=>setShowAuth(false)}/>}
+    {showApp&&user&&<AppModal user={user} onClose={()=>setShowApp(false)}/>}
+    <CookieBanner/>
+  </>);
+}
+
+ReactDOM.render(<App/>,document.getElementById('root'));
+</script>
+</body>
+</html>

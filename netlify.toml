@@ -1,0 +1,20 @@
+[build]
+  publish = "."
+  functions = "netlify/functions"
+
+[[redirects]]
+  from = "http://brand-voice.space/*"
+  to = "https://brand-voice.space/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "https://www.brand-voice.space/*"
+  to = "https://brand-voice.space/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
