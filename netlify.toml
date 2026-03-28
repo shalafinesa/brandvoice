@@ -1,0 +1,29 @@
+[build]
+  publish = "."
+  functions = "netlify/functions"
+
+# MAINTENANCE MODE
+# To activate: uncomment the 4 lines below and deploy
+# To deactivate: comment them out again and deploy
+#
+# [[redirects]]
+#   from = "/*"
+#   to = "/maintenance.html"
+#   status = 200
+
+[[redirects]]
+  from = "http://brand-voice.space/*"
+  to = "https://brand-voice.space/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "https://www.brand-voice.space/*"
+  to = "https://brand-voice.space/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
