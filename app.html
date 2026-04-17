@@ -1,0 +1,1164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Brand Voice — App</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#060810;--s1:#0C0F1A;--s2:#131724;--s3:#1C2033;
+  --b1:rgba(255,255,255,0.05);--b2:rgba(255,255,255,0.09);--b3:rgba(255,255,255,0.16);
+  --blue:#5B8AF7;--blue2:#3D6EF5;--glow:rgba(91,138,247,0.15);
+  --amber:#F59E0B;--green:#10B981;--red:#EF4444;--purple:#8B5CF6;
+  --t1:#E8EBF5;--t2:#8892B0;--t3:#4A5280;
+}
+html,body{height:100%;overflow:hidden}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--t1);font-weight:400}
+#root{height:100%;display:flex;flex-direction:column}
+
+/* TOPBAR */
+.topbar{background:var(--s1);border-bottom:1px solid var(--b1);padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:54px;flex-shrink:0}
+.tb-logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo-b{width:30px;height:30px;background:var(--blue2);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:17px;color:#fff;letter-spacing:-1px;flex-shrink:0}
+.tb-name{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:16px;color:var(--t1)}
+.tb-right{display:flex;align-items:center;gap:10px}
+.tb-user{font-size:12px;color:var(--t3);max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.btn-sm{padding:6px 14px;background:transparent;color:var(--t2);border:1px solid var(--b1);border-radius:7px;font-size:12px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.15s}
+.btn-sm:hover{border-color:var(--b2);color:var(--t1)}
+.btn-blue-sm{padding:6px 14px;background:var(--blue2);color:#fff;border:none;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.15s}
+.btn-blue-sm:hover{background:var(--blue)}
+
+/* LAYOUT */
+.app-layout{flex:1;display:flex;overflow:hidden}
+.sidebar{width:220px;background:var(--s1);border-right:1px solid var(--b1);display:flex;flex-direction:column;flex-shrink:0;padding:16px 0}
+.sidebar-section{padding:0 12px;margin-bottom:24px}
+.sidebar-label{font-size:10px;font-weight:700;color:var(--t3);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px;padding:0 6px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;cursor:pointer;transition:all 0.15s;font-size:13px;color:var(--t2);font-weight:400;border:none;background:none;width:100%;text-align:left;font-family:'DM Sans',sans-serif}
+.nav-item:hover{background:var(--b1);color:var(--t1)}
+.nav-item.active{background:rgba(91,138,247,0.1);color:var(--blue);font-weight:500}
+.nav-item.active .nav-icon{color:var(--blue)}
+.nav-icon{font-size:15px;flex-shrink:0;width:18px;text-align:center}
+.sidebar-bottom{margin-top:auto;padding:12px}
+.sub-badge{display:flex;align-items:center;gap:8px;padding:10px 12px;background:var(--s2);border:1px solid var(--b1);border-radius:10px;font-size:12px}
+.sub-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.sub-dot.trial{background:var(--amber)}
+.sub-dot.active{background:var(--green)}
+.sub-dot.expired{background:var(--red)}
+.sub-text{color:var(--t2);font-weight:300;line-height:1.4;font-size:11.5px}
+
+/* MAIN CONTENT */
+.main{flex:1;overflow-y:auto;background:var(--bg)}
+.main-inner{max-width:760px;margin:0 auto;padding:28px 32px}
+.page-title{font-family:'Bricolage Grotesque',sans-serif;font-size:22px;font-weight:700;color:var(--t1);margin-bottom:4px;letter-spacing:-0.3px}
+.page-sub{font-size:13px;color:var(--t3);margin-bottom:24px;font-weight:300}
+
+/* GENERATE */
+.gen-card{background:var(--s1);border:1px solid var(--b1);border-radius:14px;padding:20px;margin-bottom:16px}
+.gen-card-title{font-size:12px;font-weight:700;color:var(--t2);letter-spacing:1px;text-transform:uppercase;margin-bottom:14px}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.field-label{font-size:11px;font-weight:600;color:var(--t2);letter-spacing:0.8px;text-transform:uppercase;margin-bottom:7px;display:block}
+select,input,textarea{width:100%;padding:10px 12px;background:var(--s2);border:1px solid var(--b2);border-radius:9px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--t1);outline:none;transition:border-color 0.2s}
+select:focus,input:focus,textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px var(--glow)}
+select option{background:var(--s2)}
+input::placeholder,textarea::placeholder{color:var(--t3)}
+textarea{resize:none;line-height:1.55}
+.templates-row{display:flex;gap:7px;flex-wrap:wrap}
+.tpl{padding:6px 13px;background:var(--s2);border:1px solid var(--b1);border-radius:100px;font-size:12px;color:var(--t2);cursor:pointer;transition:all 0.15s;white-space:nowrap;font-family:'DM Sans',sans-serif}
+.tpl:hover{border-color:var(--b3);color:var(--t1)}
+.tpl.sel{background:rgba(91,138,247,0.1);border-color:rgba(91,138,247,0.3);color:var(--blue);font-weight:500}
+.examples-list{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+.ex{padding:9px 12px;background:var(--s2);border:1px solid var(--b1);border-radius:8px;cursor:pointer;font-size:12.5px;color:var(--t2);transition:all 0.15s;line-height:1.4;font-family:'DM Sans',sans-serif}
+.ex:hover{border-color:rgba(91,138,247,0.25);color:var(--blue)}
+.or-divider{font-size:11px;color:var(--t3);text-align:center;margin:10px 0}
+.btn-generate{width:100%;padding:13px;background:var(--blue2);color:#fff;border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-generate:hover:not(:disabled){background:var(--blue);transform:translateY(-1px);box-shadow:0 8px 24px rgba(61,110,245,0.3)}
+.btn-generate:disabled{opacity:0.4;cursor:not-allowed;transform:none}
+
+/* RESULTS */
+.results-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px}
+.results-info{font-size:12px;color:var(--t3);font-weight:300}
+.results-actions{display:flex;gap:8px;flex-wrap:wrap}
+.btn-action{padding:6px 12px;background:var(--s1);border:1px solid var(--b1);border-radius:7px;font-size:12px;color:var(--t2);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.15s;display:flex;align-items:center;gap:5px}
+.btn-action:hover{border-color:var(--b2);color:var(--t1)}
+.pc{background:var(--s1);border:1px solid var(--b1);border-radius:12px;margin-bottom:12px;overflow:hidden;transition:border-color 0.2s}
+.pc:hover{border-color:var(--b2)}
+.pc-head{display:flex;align-items:center;justify-content:space-between;padding:11px 14px;border-bottom:1px solid var(--b1)}
+.pc-left{display:flex;align-items:center;gap:8px}
+.pc-icon{width:26px;height:26px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0}
+.pc-name{font-weight:600;font-size:12.5px}
+.pc-char{font-size:10px;color:var(--t3);margin-left:4px}
+.pc-btns{display:flex;gap:5px}
+.btn-regen{padding:4px 9px;background:var(--s2);border:1px solid var(--b2);border-radius:5px;font-size:11px;font-weight:500;cursor:pointer;color:var(--t2);font-family:'DM Sans',sans-serif;transition:all 0.15s}
+.btn-regen:hover{border-color:rgba(91,138,247,0.3);color:var(--blue)}
+.btn-regen:disabled{opacity:0.4;cursor:not-allowed}
+.btn-post{padding:4px 9px;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.2);border-radius:5px;font-size:11px;font-weight:500;cursor:pointer;color:#6EE7B7;font-family:'DM Sans',sans-serif;transition:all 0.15s}
+.btn-post:hover{background:rgba(16,185,129,0.15)}
+.btn-copy{padding:4px 10px;background:var(--bg);border:1px solid var(--b2);border-radius:5px;font-size:11px;font-weight:600;cursor:pointer;color:var(--t2);font-family:'DM Sans',sans-serif;transition:all 0.15s}
+.btn-copy:hover{background:var(--s2)}
+.btn-copy.copied{background:rgba(16,185,129,0.08);border-color:rgba(16,185,129,0.2);color:#6EE7B7}
+.pc-body{padding:14px}
+.pc-text{font-size:13px;line-height:1.82;color:#BFC4DC;white-space:pre-wrap;word-break:break-word;font-weight:300}
+.pc-tags{margin-top:9px;font-size:12px;color:#6B7FBB;line-height:1.68;word-break:break-word}
+.tk-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--t3);margin-bottom:5px;margin-top:14px}
+.tk-label:first-child{margin-top:0}
+
+/* HISTORY */
+.hist-list{display:flex;flex-direction:column;gap:10px}
+.hist-item{background:var(--s1);border:1px solid var(--b1);border-radius:12px;padding:14px 16px;cursor:pointer;transition:all 0.18s}
+.hist-item:hover{border-color:var(--b2);transform:translateX(2px)}
+.hist-topic{font-size:14px;font-weight:500;color:var(--t1);margin-bottom:5px}
+.hist-meta{display:flex;gap:14px;font-size:11.5px;color:var(--t3)}
+.hist-empty{text-align:center;padding:60px 0;color:var(--t3)}
+.hist-empty-icon{font-size:36px;margin-bottom:14px}
+.hist-empty-text{font-size:14px;line-height:1.6}
+
+/* CONNECT */
+.connect-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;margin-bottom:24px}
+.connect-card{background:var(--s1);border:1px solid var(--b1);border-radius:14px;padding:18px}
+.connect-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.connect-plat{display:flex;align-items:center;gap:10px}
+.connect-icon{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.connect-name{font-size:14px;font-weight:600;color:var(--t1)}
+.connect-sub{font-size:12px;color:var(--t3);margin-top:1px;font-weight:300}
+.badge-connected{display:flex;align-items:center;gap:5px;padding:3px 9px;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.2);border-radius:100px;font-size:11px;color:#6EE7B7;font-weight:500}
+.badge-notconn{display:flex;align-items:center;gap:5px;padding:3px 9px;background:var(--s2);border:1px solid var(--b2);border-radius:100px;font-size:11px;color:var(--t3)}
+.connect-desc{font-size:12.5px;color:var(--t2);line-height:1.65;margin-bottom:14px;font-weight:300}
+.btn-connect{width:100%;padding:9px;background:var(--s2);border:1px solid var(--b2);border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;color:var(--t1);font-family:'DM Sans',sans-serif;transition:all 0.15s}
+.btn-connect:hover{border-color:var(--b3);background:var(--s3)}
+.btn-connect.conn{background:rgba(239,68,68,0.08);border-color:rgba(239,68,68,0.2);color:#FCA5A5}
+.coming-soon-badge{display:inline-flex;align-items:center;padding:2px 8px;background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.2);border-radius:100px;font-size:10px;font-weight:600;color:var(--amber);margin-left:8px}
+
+/* SETTINGS / ACCOUNT */
+.settings-section{background:var(--s1);border:1px solid var(--b1);border-radius:14px;padding:20px;margin-bottom:16px}
+.settings-title{font-size:13px;font-weight:700;color:var(--t1);margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--b1)}
+.settings-row{display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-bottom:1px solid var(--b1)}
+.settings-row:last-child{border-bottom:none}
+.settings-label{font-size:13px;color:var(--t2);font-weight:300}
+.settings-value{font-size:13px;color:var(--t1);font-weight:500}
+.plan-card{background:linear-gradient(135deg,rgba(91,138,247,0.1),rgba(139,92,246,0.08));border:1px solid rgba(91,138,247,0.2);border-radius:14px;padding:20px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.plan-info .plan-name{font-family:'Bricolage Grotesque',sans-serif;font-size:18px;font-weight:700;color:var(--t1)}
+.plan-info .plan-desc{font-size:13px;color:var(--t2);margin-top:4px;font-weight:300}
+.plan-price{text-align:right}
+.plan-amt{font-family:'Bricolage Grotesque',sans-serif;font-size:28px;font-weight:800;color:var(--t1)}
+.plan-per{font-size:12px;color:var(--t3);font-weight:300}
+
+/* LOADING */
+.loading-full{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:12px}
+.spinner{width:32px;height:32px;border:2.5px solid var(--b2);border-top-color:var(--blue);border-radius:50%;animation:spin 0.8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-plats{display:flex;gap:10px;font-size:20px}
+
+/* ERROR / NOTICE */
+.notice-err{background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.18);border-radius:9px;padding:10px 14px;font-size:13px;color:#FCA5A5;margin-bottom:16px}
+.notice-warn{background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.18);border-radius:9px;padding:10px 14px;font-size:13px;color:#D4A853;margin-bottom:16px}
+.notice-info{background:rgba(91,138,247,0.07);border:1px solid rgba(91,138,247,0.18);border-radius:9px;padding:10px 14px;font-size:13px;color:#93B4FF;margin-bottom:16px}
+
+/* PAYWALL */
+.paywall{text-align:center;padding:60px 24px}
+.paywall-icon{font-size:48px;margin-bottom:18px}
+.paywall-title{font-family:'Bricolage Grotesque',sans-serif;font-size:26px;font-weight:700;color:var(--t1);margin-bottom:10px}
+.paywall-sub{font-size:14px;color:var(--t2);margin-bottom:28px;font-weight:300;line-height:1.7;max-width:420px;margin-left:auto;margin-right:auto}
+.paywall-price{background:var(--s1);border:1px solid var(--b2);border-radius:16px;padding:24px 32px;max-width:320px;margin:0 auto 24px;text-align:center}
+.paywall-amt{font-family:'Bricolage Grotesque',sans-serif;font-size:48px;font-weight:800;color:var(--t1);line-height:1}
+.paywall-amt sup{font-size:22px;color:var(--blue);vertical-align:super}
+.paywall-feats{text-align:left;margin-top:16px;display:flex;flex-direction:column;gap:7px}
+.paywall-feats div{font-size:13px;color:var(--t2)}
+
+/* ONBOARDING */
+.ob-wrap{max-width:520px;margin:0 auto}
+.ob-prog{display:flex;gap:5px;margin-bottom:28px}
+.ob-pd{height:2.5px;border-radius:2px;flex:1;background:var(--b2);transition:background 0.35s}
+.ob-pd.active{background:var(--blue)}
+.ob-pd.done{background:var(--t1)}
+.ob-slabel{font-size:10px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:1.8px;margin-bottom:8px}
+.ob-stitle{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:26px;letter-spacing:-0.3px;margin-bottom:6px;color:var(--t1)}
+.ob-ssub{color:var(--t2);font-size:13px;line-height:1.7;margin-bottom:22px;font-weight:300}
+.ob-tone-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.ob-tone{padding:12px 14px;border:1px solid var(--b2);border-radius:10px;cursor:pointer;background:var(--s2);transition:all 0.15s;text-align:left}
+.ob-tone:hover{border-color:var(--b3)}
+.ob-tone.sel{border-color:var(--blue);background:rgba(91,138,247,0.08)}
+.ob-tone-name{font-weight:600;font-size:13px;color:var(--t1)}
+.ob-tone-desc{font-size:11px;color:var(--t2);margin-top:2px}
+.ob-tone.sel .ob-tone-name{color:var(--blue)}
+.btn-ob-next{width:100%;padding:13px;background:var(--blue2);color:#fff;border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:all 0.15s;margin-top:4px}
+.btn-ob-next:hover{background:var(--blue)}
+.btn-ob-next:disabled{opacity:0.4;cursor:not-allowed}
+.btn-ob-back{background:none;border:none;color:var(--t3);font-size:12px;cursor:pointer;padding:0;margin-bottom:16px;display:flex;align-items:center;gap:4px;font-family:'DM Sans',sans-serif;transition:color 0.15s;font-weight:500}
+.btn-ob-back:hover{color:var(--t1)}
+
+/* AUTH */
+.auth-wrap{display:flex;align-items:center;justify-content:center;height:100%;background:var(--bg)}
+.auth-box{background:var(--s1);border:1px solid var(--b2);border-radius:22px;width:100%;max-width:400px;padding:36px 32px;margin:20px}
+.auth-logo-row{display:flex;align-items:center;gap:10px;margin-bottom:28px}
+.auth-title{font-family:'Bricolage Grotesque',sans-serif;font-size:23px;font-weight:700;color:var(--t1);margin-bottom:6px;letter-spacing:-0.3px}
+.auth-sub{font-size:13px;color:var(--t2);margin-bottom:24px;font-weight:300;line-height:1.6}
+.auth-field{margin-bottom:14px}
+.auth-field label{display:block;font-size:11px;font-weight:600;color:var(--t2);margin-bottom:7px;letter-spacing:1px;text-transform:uppercase}
+.auth-field input{width:100%;padding:11px 13px;border:1px solid var(--b2);border-radius:9px;font-family:'DM Sans',sans-serif;font-size:14px;background:var(--s2);color:var(--t1);outline:none;transition:border-color 0.2s}
+.auth-field input:focus{border-color:var(--blue);box-shadow:0 0 0 3px var(--glow)}
+.auth-field input::placeholder{color:var(--t3)}
+.auth-btn{width:100%;padding:12px;background:var(--blue2);color:#fff;border:none;border-radius:9px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:all 0.2s;margin-top:4px}
+.auth-btn:hover:not(:disabled){background:var(--blue)}
+.auth-btn:disabled{opacity:0.45;cursor:not-allowed}
+.auth-err{background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.2);border-radius:8px;padding:10px 14px;font-size:13px;color:#FCA5A5;margin-bottom:14px}
+.auth-ok{background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.2);border-radius:8px;padding:10px 14px;font-size:13px;color:#6EE7B7;margin-bottom:14px}
+.auth-switch{text-align:center;margin-top:18px;font-size:13px;color:var(--t2)}
+.auth-switch button{background:none;border:none;color:var(--blue);font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:13px;padding:0}
+.auth-forgot{text-align:right;margin-top:-6px;margin-bottom:12px}
+.auth-forgot button{background:none;border:none;color:var(--t3);font-size:12px;cursor:pointer;font-family:'DM Sans',sans-serif}
+.auth-forgot button:hover{color:var(--blue)}
+.auth-spin{width:15px;height:15px;border:2px solid rgba(255,255,255,0.3);border-top-color:#fff;border-radius:50%;animation:spin 0.7s linear infinite;display:inline-block;vertical-align:middle;margin-right:7px}
+
+/* POST MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,8,0.82);z-index:300;display:flex;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(8px)}
+.modal-box{background:var(--s1);border:1px solid var(--b2);border-radius:18px;width:100%;max-width:480px;overflow:hidden;max-height:90vh;overflow-y:auto}
+.modal-head{display:flex;align-items:center;justify-content:space-between;padding:18px 20px;border-bottom:1px solid var(--b1)}
+.modal-title{font-family:'Bricolage Grotesque',sans-serif;font-size:16px;font-weight:700;color:var(--t1)}
+.modal-close{width:28px;height:28px;background:var(--s2);border:1px solid var(--b2);border-radius:6px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--t2);border:none}
+.modal-body{padding:20px}
+.step-row{display:flex;gap:12px;margin-bottom:16px;align-items:flex-start}
+.step-circle{width:26px;height:26px;background:rgba(91,138,247,0.12);border:1px solid rgba(91,138,247,0.25);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--blue);flex-shrink:0;margin-top:2px}
+.step-text{font-size:13.5px;color:var(--t2);line-height:1.6;font-weight:300}
+.step-text strong{color:var(--t1);font-weight:500}
+.content-preview{background:var(--s2);border:1px solid var(--b1);border-radius:10px;padding:14px;margin:14px 0;font-size:12.5px;color:#BFC4DC;line-height:1.75;max-height:160px;overflow-y:auto;white-space:pre-wrap;word-break:break-word}
+.btn-copy-big{width:100%;padding:12px;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.2);border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;color:#6EE7B7;font-family:'DM Sans',sans-serif;transition:all 0.2s;margin-bottom:10px}
+.btn-copy-big:hover{background:rgba(16,185,129,0.18)}
+.btn-copy-big.copied{background:rgba(16,185,129,0.2);border-color:rgba(16,185,129,0.4)}
+.btn-open-plat{width:100%;padding:12px;background:var(--blue2);border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;color:#fff;font-family:'DM Sans',sans-serif;transition:all 0.2s}
+.btn-open-plat:hover{background:var(--blue)}
+/* SCHEDULE MODAL */
+.sch-field{margin-bottom:16px}
+.sch-field label{display:block;font-size:11px;font-weight:600;color:var(--t2);letter-spacing:1px;text-transform:uppercase;margin-bottom:7px}
+.sch-field input[type="datetime-local"]{width:100%;padding:11px 13px;background:var(--s2);border:1px solid var(--b2);border-radius:9px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--t1);outline:none;transition:border-color 0.2s;color-scheme:dark}
+.sch-field input[type="datetime-local"]:focus{border-color:var(--blue);box-shadow:0 0 0 3px var(--glow)}
+.plat-selector{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.plat-sel-btn{padding:10px 8px;background:var(--s2);border:1px solid var(--b2);border-radius:9px;cursor:pointer;text-align:center;transition:all 0.15s;font-family:'DM Sans',sans-serif}
+.plat-sel-btn.sel{border-color:var(--blue);background:rgba(91,138,247,0.1)}
+.plat-sel-btn:hover{border-color:var(--b3)}
+.plat-sel-icon{font-size:18px;display:block;margin-bottom:4px}
+.plat-sel-name{font-size:11px;color:var(--t2);font-weight:400}
+.plat-sel-btn.sel .plat-sel-name{color:var(--blue)}
+/* SCHEDULED LIST */
+.sched-list{display:flex;flex-direction:column;gap:10px}
+.sched-item{background:var(--s1);border:1px solid var(--b1);border-radius:12px;padding:16px;transition:all 0.18s}
+.sched-item:hover{border-color:var(--b2)}
+.sched-item-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;flex-wrap:wrap;gap:8px}
+.sched-item-left{display:flex;align-items:center;gap:10px}
+.sched-time{font-family:'Bricolage Grotesque',sans-serif;font-size:14px;font-weight:700;color:var(--t1)}
+.sched-plat-badge{display:flex;align-items:center;gap:5px;padding:3px 10px;background:var(--s2);border:1px solid var(--b1);border-radius:100px;font-size:11px;color:var(--t2)}
+.sched-status{padding:3px 10px;border-radius:100px;font-size:11px;font-weight:600}
+.sched-status.scheduled{background:rgba(91,138,247,0.1);color:var(--blue);border:1px solid rgba(91,138,247,0.2)}
+.sched-status.due{background:rgba(245,158,11,0.1);color:var(--amber);border:1px solid rgba(245,158,11,0.2);animation:pulse-badge 1.5s ease-in-out infinite}
+.sched-status.posted{background:rgba(16,185,129,0.1);color:#6EE7B7;border:1px solid rgba(16,185,129,0.2)}
+.sched-status.cancelled{background:rgba(239,68,68,0.08);color:#FCA5A5;border:1px solid rgba(239,68,68,0.15)}
+@keyframes pulse-badge{0%,100%{opacity:1}50%{opacity:0.6}}
+.sched-content-preview{font-size:12.5px;color:var(--t3);line-height:1.6;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;margin-bottom:10px}
+.sched-actions{display:flex;gap:8px}
+.btn-sched-act{padding:5px 12px;background:var(--s2);border:1px solid var(--b1);border-radius:7px;font-size:12px;cursor:pointer;color:var(--t2);font-family:'DM Sans',sans-serif;transition:all 0.15s}
+.btn-sched-act:hover{border-color:var(--b2);color:var(--t1)}
+.btn-sched-post{padding:5px 12px;background:rgba(91,138,247,0.1);border:1px solid rgba(91,138,247,0.2);border-radius:7px;font-size:12px;cursor:pointer;color:var(--blue);font-family:'DM Sans',sans-serif;font-weight:500;transition:all 0.15s}
+.btn-sched-cancel{padding:5px 12px;background:rgba(239,68,68,0.07);border:1px solid rgba(239,68,68,0.15);border-radius:7px;font-size:12px;cursor:pointer;color:#FCA5A5;font-family:'DM Sans',sans-serif;transition:all 0.15s}
+.due-banner{background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.2);border-radius:10px;padding:12px 16px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.due-banner-text{font-size:13px;color:#D4A853;font-weight:500}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-top:16px}
+.cal-day-name{text-align:center;font-size:10px;font-weight:700;color:var(--t3);letter-spacing:1px;text-transform:uppercase;padding:6px 0}
+.cal-day{min-height:60px;background:var(--s2);border:1px solid var(--b1);border-radius:8px;padding:6px;cursor:pointer;transition:border-color 0.15s}
+.cal-day:hover{border-color:var(--b2)}
+.cal-day.today{border-color:rgba(91,138,247,0.35);background:rgba(91,138,247,0.05)}
+.cal-day.other-month{opacity:0.35}
+.cal-day-num{font-size:11px;font-weight:600;color:var(--t2);margin-bottom:4px}
+.cal-event{font-size:9px;padding:2px 5px;border-radius:3px;background:rgba(91,138,247,0.15);color:var(--blue);margin-bottom:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const var_amber='#F59E0B';
+
+/* ── HELPERS ── */
+function getPlatContent(pid,content){
+  if(!content||!content[pid])return'';
+  if(pid==='linkedin')return`${content.linkedin.post||''}\n\n${content.linkedin.hashtags||''}`;
+  if(pid==='instagram')return`${content.instagram.caption||''}\n\n${content.instagram.hashtags||''}`;
+  if(pid==='twitter')return content.twitter.post||'';
+  if(pid==='facebook')return content.facebook.post||'';
+  if(pid==='tiktok')return`HOOK:\n${content.tiktok.hook||''}\n\nSCRIPT:\n${content.tiktok.body||''}\n\nCTA:\n${content.tiktok.cta||''}`;
+  return'';
+}
+
+/* ── POST MODAL ── */
+function PostModal({pid,copyText,onClose}){
+  const p=PLATS.find(x=>x.id===pid);
+  const [copied,setCopied]=useState(false);
+  const doCopy=()=>{navigator.clipboard.writeText(copyText);setCopied(true);};
+  const openPlat=()=>{
+    const urls={twitter:'https://twitter.com/compose/tweet',linkedin:'https://www.linkedin.com/feed/',facebook:'https://www.facebook.com/',instagram:'https://www.instagram.com/',tiktok:'https://www.tiktok.com/upload'};
+    window.open(urls[pid]||'https://www.google.com','_blank');
+  };
+  const steps={
+    twitter:['Copy your tweet below','Click "Open X" — the compose window opens','Paste with Cmd+V or Ctrl+V','Click Tweet — done!'],
+    linkedin:['Copy your post below','Click "Open LinkedIn"','Click "Start a post" at top of feed','Paste your content and click Post'],
+    facebook:['Copy your post below','Click "Open Facebook"','Click "What\'s on your mind?"','Paste and click Post'],
+    instagram:['Copy your caption below','Open Instagram on your phone','Tap + to create a new post','Select photo then paste your caption'],
+    tiktok:['Copy your script below','Click "Open TikTok"','Start recording — use script as teleprompter','Paste caption when uploading'],
+  };
+  return(
+    <div className="modal-overlay" onClick={e=>{if(e.target===e.currentTarget)onClose();}}>
+      <div className="modal-box">
+        <div className="modal-head">
+          <div style={{display:'flex',alignItems:'center',gap:10}}>
+            <div style={{width:28,height:28,borderRadius:7,background:p.bg,color:p.color,display:'flex',alignItems:'center',justifyContent:'center',fontSize:11,fontWeight:700,flexShrink:0}}>{p.letter}</div>
+            <span className="modal-title">Post to {p.name}</span>
+          </div>
+          <button className="modal-close" onClick={onClose}>✕</button>
+        </div>
+        <div className="modal-body">
+          <div style={{marginBottom:16}}>
+            {(steps[pid]||[]).map((s,i)=>(
+              <div key={i} className="step-row">
+                <div className="step-circle">{i+1}</div>
+                <div className="step-text">{s}</div>
+              </div>
+            ))}
+          </div>
+          <div style={{fontSize:11,fontWeight:700,color:'var(--t3)',letterSpacing:1,textTransform:'uppercase',marginBottom:8}}>Your content</div>
+          <div className="content-preview">{copyText}</div>
+          <button className={`btn-copy-big ${copied?'copied':''}`} onClick={doCopy}>
+            {copied?'✓ Copied to clipboard! Now open the platform →':'📋 Copy content'}
+          </button>
+          {copied&&(
+            <button className="btn-open-plat" onClick={openPlat}>
+              Open {p.name} to paste →
+            </button>
+          )}
+          {!copied&&<div style={{textAlign:'center',fontSize:12,color:'var(--t3)',marginTop:8}}>Copy your content first, then we'll open {p.name}</div>}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ── SCHEDULE MODAL ── */
+function ScheduleModal({allContent,topic,language,user,onClose,onScheduled}){
+  const [selPid,setSelPid]=useState('linkedin');
+  const [dt,setDt]=useState(()=>{const d=new Date();d.setHours(d.getHours()+1,0,0,0);return d.toISOString().slice(0,16);});
+  const [saving,setSaving]=useState(false);
+  const [done,setDone]=useState(false);
+
+  const save=async()=>{
+    setSaving(true);
+    const text=getPlatContent(selPid,allContent);
+    await db.from('scheduled_posts').insert({user_id:user.id,platform:selPid,content:text,topic:topic||'',language:language||'English',scheduled_for:new Date(dt).toISOString(),status:'scheduled'});
+    setSaving(false);setDone(true);
+    setTimeout(()=>{onScheduled();onClose();},1600);
+  };
+
+  return(
+    <div className="modal-overlay" onClick={e=>{if(e.target===e.currentTarget)onClose();}}>
+      <div className="modal-box">
+        <div className="modal-head">
+          <span className="modal-title">📅 Schedule a post</span>
+          <button className="modal-close" onClick={onClose}>✕</button>
+        </div>
+        <div className="modal-body">
+          {done?(
+            <div style={{textAlign:'center',padding:'32px 0'}}>
+              <div style={{fontSize:40,marginBottom:14}}>✅</div>
+              <div style={{fontFamily:"'Bricolage Grotesque',sans-serif",fontSize:18,fontWeight:700,color:'var(--t1)',marginBottom:8}}>Post scheduled!</div>
+              <div style={{fontSize:13,color:'var(--t2)',lineHeight:1.6}}>Check your Scheduled tab to manage it.<br/>We'll remind you when it's time to post.</div>
+            </div>
+          ):(
+            <>
+              <div className="sch-field">
+                <label>Select platform</label>
+                <div className="plat-selector">
+                  {PLATS.map(pl=>(
+                    <div key={pl.id} className={`plat-sel-btn ${selPid===pl.id?'sel':''}`} onClick={()=>setSelPid(pl.id)}>
+                      <span className="plat-sel-icon" style={{color:pl.color}}>{pl.letter}</span>
+                      <div className="plat-sel-name">{pl.name.split('/')[0].trim()}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className="sch-field">
+                <label>Date & time</label>
+                <input type="datetime-local" value={dt} min={new Date().toISOString().slice(0,16)} onChange={e=>setDt(e.target.value)}/>
+              </div>
+              <div className="sch-field">
+                <label>Content preview</label>
+                <div className="content-preview" style={{maxHeight:90,fontSize:12}}>{getPlatContent(selPid,allContent)||'No content for this platform'}</div>
+              </div>
+              <div style={{background:'rgba(91,138,247,0.06)',border:'1px solid rgba(91,138,247,0.14)',borderRadius:9,padding:'10px 13px',fontSize:12.5,color:'#93B4FF',marginBottom:16,lineHeight:1.6}}>
+                ⚡ We'll remind you in-app when it's time. Copy & paste posting works now. Auto-posting via platform API coming in the next update.
+              </div>
+              <button className="btn-generate" onClick={save} disabled={saving||!dt||!getPlatContent(selPid,allContent)}>
+                {saving?'Saving...':'📅 Schedule this post →'}
+              </button>
+            </>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+const SB_URL='https://xqknnlveduztdeqrdxdi.supabase.co';
+const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhxa25ubHZlZHV6dGRlcXJkeGRpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYzNjcxNDQsImV4cCI6MjA5MTk0MzE0NH0.gxNZPRlNVy0egbJE0lN4Drpuo-UQXRueOJXnbVmb6Zo';
+const {createClient}=supabase;
+const db=createClient(SB_URL,SB_KEY);
+
+const PLATS=[
+  {id:'linkedin',name:'LinkedIn',bg:'#1E3A5F',color:'#5B9BD5',letter:'in'},
+  {id:'instagram',name:'Instagram',bg:'#3D1A35',color:'#E879D0',letter:'◈'},
+  {id:'twitter',name:'X / Twitter',bg:'#1A1A2E',color:'#8899CC',letter:'✕'},
+  {id:'facebook',name:'Facebook',bg:'#1A2260',color:'#6B8EF0',letter:'f'},
+  {id:'tiktok',name:'TikTok',bg:'#0A2525',color:'#40C0B0',letter:'♪'},
+];
+const TONES=[{id:'professional',name:'Professional',desc:'Expert & authoritative'},{id:'casual',name:'Casual',desc:'Friendly & relatable'},{id:'inspiring',name:'Inspiring',desc:'Motivational & bold'},{id:'direct',name:'Direct',desc:'No-fluff & punchy'}];
+const LANGUAGES=['English','German','French','Spanish','Italian','Portuguese'];
+const TEMPLATES=[
+  {id:'value',label:'💡 Tips & Value'},{id:'sell',label:'💰 Promote'},
+  {id:'educate',label:'🎓 Educate'},{id:'inspire',label:'✨ Inspire'},
+  {id:'bts',label:'🔍 Behind Scenes'},{id:'casestudy',label:'📊 Case Study'},
+  {id:'question',label:'❓ Engage'},{id:'announce',label:'📢 Announce'},
+];
+const EXAMPLE_TOPICS=[
+  "3 mistakes my clients make before working with me",
+  "Behind the scenes: how I built this in 48 hours",
+  "Why I quit my 9-5 to start this business",
+];
+const SOCIAL_PLATFORMS=[
+  {id:'linkedin',name:'LinkedIn',icon:'💼',color:'#0A66C2',bg:'#1E3A5F',desc:'Post directly to your LinkedIn profile or company page.'},
+  {id:'instagram',name:'Instagram',icon:'📸',color:'#E879D0',bg:'#3D1A35',desc:'Schedule and post to your Instagram business account.'},
+  {id:'twitter',name:'X / Twitter',icon:'🐦',color:'#8899CC',bg:'#1A1A2E',desc:'Tweet directly from the app after generating.'},
+  {id:'facebook',name:'Facebook',icon:'👥',color:'#6B8EF0',bg:'#1A2260',desc:'Post to your Facebook page or profile.'},
+  {id:'tiktok',name:'TikTok',icon:'🎵',color:'#40C0B0',bg:'#0A2525',desc:'Copy your TikTok script — direct posting coming soon.'},
+  {id:'canva',name:'Canva',icon:'🎨',color:'#00C4CC',bg:'#0A2525',desc:'Open your content in Canva to create matching visuals.'},
+];
+
+function trialDaysLeft(user){
+  if(!user)return 0;
+  const d=new Date(user.created_at);
+  const end=new Date(d.getTime()+3*24*60*60*1000);
+  return Math.max(0,Math.ceil((end-new Date())/(1000*60*60*24)));
+}
+
+async function callGenerate(messages,session){
+  const token=session?.access_token;
+  const r=await fetch('/api/generate',{
+    method:'POST',
+    headers:{'Content-Type':'application/json',...(token?{Authorization:`Bearer ${token}`}:{})},
+    body:JSON.stringify({messages})
+  });
+  const d=await r.json();
+  if(d.error)throw new Error(d.error);
+  return JSON.parse(d.content[0].text.replace(/```json|```/g,'').trim());
+}
+
+function buildPrompt(brand,topic,lang,tpl){
+  const instr={value:'Share valuable tips and insights',sell:'Promote the product/service with compelling copy',educate:'Teach something practical and actionable',inspire:'Write motivational, bold and inspiring content',bts:'Tell an authentic behind-the-scenes story',casestudy:'Share results, data, and social proof',question:'Ask engaging questions that spark conversation',announce:'Make an exciting announcement with clear CTA'}[tpl]||'Create engaging content';
+  return `You are a world-class social media strategist. Create platform-native content in ${lang}.\n\nBRAND: ${brand.business_name}\nNICHE: ${brand.niche}\nPRODUCT: ${brand.product}\nAUDIENCE: ${brand.audience}\nTONE: ${brand.tone}\nKEYWORDS: ${brand.keywords||'none'}\nTOPIC: ${topic}\nGOAL: ${instr}\n\nRules:\nLINKEDIN: Strong hook + 3-4 paragraphs + CTA + 5-7 hashtags separately.\nINSTAGRAM: Punchy hook + 4-6 lines + question + 15-20 hashtags separately.\nTWITTER: Under 280 chars, max 2 hashtags, highly shareable.\nFACEBOOK: 120-200 words, conversational, community-first CTA.\nTIKTOK: HOOK (3 sec), BODY (30-45 sec script), CTA (5 sec).\n\nReturn ONLY valid JSON:\n{"linkedin":{"post":"...","hashtags":"..."},"instagram":{"caption":"...","hashtags":"..."},"twitter":{"post":"..."},"facebook":{"post":"..."},"tiktok":{"hook":"...","body":"...","cta":"..."}}`;
+}
+
+function CopyBtn({text}){
+  const [c,setC]=useState(false);
+  return <button className={`btn-copy ${c?'copied':''}`} onClick={()=>{navigator.clipboard.writeText(text);setC(true);setTimeout(()=>setC(false),2000)}}>{c?'✓':'Copy'}</button>;
+}
+
+function PlatCard({pid,content,allContent,onRegen,regenLoading,canvaLoading,onCanva,topic,language,user,onScheduled}){
+  const p=PLATS.find(x=>x.id===pid);
+  const [showPost,setShowPost]=useState(false);
+  const [showSch,setShowSch]=useState(false);
+  let main='',tags='',cp='';
+  if(pid==='linkedin'){main=content.post;tags=content.hashtags;cp=`${main}\n\n${tags}`;}
+  else if(pid==='instagram'){main=content.caption;tags=content.hashtags;cp=`${main}\n\n${tags}`;}
+  else if(pid==='twitter'){main=content.post;cp=main;}
+  else if(pid==='facebook'){main=content.post;cp=main;}
+  else if(pid==='tiktok'){cp=`HOOK:\n${content.hook}\n\nSCRIPT:\n${content.body}\n\nCTA:\n${content.cta}`;}
+  const lim={linkedin:1300,instagram:2200,twitter:280,facebook:500};
+  return(
+    <>
+      <div className="pc">
+        <div className="pc-head">
+          <div className="pc-left">
+            <div className="pc-icon" style={{background:p.bg,color:p.color}}>{p.letter}</div>
+            <span className="pc-name" style={{color:p.color}}>{p.name}</span>
+            {main&&lim[pid]&&<span className="pc-char">{main.length}/{lim[pid]}</span>}
+          </div>
+          <div className="pc-btns">
+            <button className="btn-regen" onClick={()=>onRegen(pid)} disabled={regenLoading[pid]}>{regenLoading[pid]?'⟳':'↺ Redo'}</button>
+            <button className="btn-post" onClick={()=>setShowPost(true)}>▶ Post now</button>
+            <button style={{padding:'4px 9px',background:'rgba(245,158,11,0.08)',border:'1px solid rgba(245,158,11,0.22)',borderRadius:5,fontSize:11,fontWeight:500,cursor:'pointer',color:var_amber,fontFamily:"'DM Sans',sans-serif"}} onClick={()=>setShowSch(true)}>📅 Schedule</button>
+            <CopyBtn text={cp}/>
+          </div>
+        </div>
+        <div className="pc-body">
+          {pid==='tiktok'?(
+            <><div className="tk-label">🎣 Hook — 3 sec</div><div className="pc-text">{content.hook}</div><div className="tk-label">🎬 Script</div><div className="pc-text">{content.body}</div><div className="tk-label">📣 CTA</div><div className="pc-text">{content.cta}</div></>
+          ):(
+            <><div className="pc-text">{main}</div>{tags&&<div className="pc-tags">{tags}</div>}</>
+          )}
+          <div style={{marginTop:12,paddingTop:12,borderTop:'1px solid var(--b1)'}}>
+            <button style={{width:'100%',padding:'7px 12px',background:'rgba(0,196,204,0.08)',border:'1px solid rgba(0,196,204,0.2)',borderRadius:7,color:'#40C0B0',fontSize:12,display:'flex',alignItems:'center',justifyContent:'center',gap:6,cursor:'pointer',fontFamily:"'DM Sans',sans-serif"}} onClick={()=>onCanva(pid,main||cp)} disabled={canvaLoading===pid}>
+              {canvaLoading===pid?'🎨 Creating...':'🎨 Create Canva design for this post'}
+            </button>
+          </div>
+        </div>
+      </div>
+      {showPost&&<PostModal pid={pid} copyText={cp} onClose={()=>setShowPost(false)}/>}
+      {showSch&&<ScheduleModal allContent={allContent} topic={topic} language={language} user={user} onClose={()=>setShowSch(false)} onScheduled={onScheduled||(() => {})}/>}
+    </>
+  );
+}
+
+function AuthView({onAuth}){
+  const [mode,setMode]=useState('signin');
+  const [email,setEmail]=useState('');
+  const [pw,setPw]=useState('');
+  const [loading,setLoading]=useState(false);
+  const [err,setErr]=useState('');
+  const [ok,setOk]=useState('');
+  const reset=()=>{setErr('');setOk('');};
+
+  const doSignIn=async()=>{
+    if(!email||!pw)return;setLoading(true);reset();
+    const{error,data}=await db.auth.signInWithPassword({email,password:pw});
+    if(error){setErr(error.message);setLoading(false);return;}
+    onAuth(data.user);
+  };
+  const doSignUp=async()=>{
+    if(!email||!pw)return;setLoading(true);reset();
+    const{error}=await db.auth.signUp({email,password:pw});
+    if(error){setErr(error.message);setLoading(false);return;}
+    setOk('✅ Check your email to confirm your account, then sign in.');
+    setMode('signin');setPw('');setLoading(false);
+  };
+  const doReset=async()=>{
+    if(!email)return;setLoading(true);reset();
+    const{error}=await db.auth.resetPasswordForEmail(email,{redirectTo:'https://brand-voice.space/app.html'});
+    if(error){setErr(error.message);setLoading(false);return;}
+    setOk('📧 Reset link sent! Check your inbox.');setLoading(false);
+  };
+  const handle=e=>{if(e.key==='Enter'){mode==='signin'?doSignIn():mode==='signup'?doSignUp():doReset();}};
+
+  return(
+    <div className="auth-wrap">
+      <div className="auth-box">
+        <div className="auth-logo-row">
+          <div className="logo-b">B</div>
+          <span style={{fontFamily:"'Bricolage Grotesque',sans-serif",fontWeight:700,fontSize:16,color:'var(--t1)'}}>Brand Voice</span>
+        </div>
+        {mode==='signin'&&<><div className="auth-title">👋 Welcome back</div><div className="auth-sub">Sign in to access your content generator.</div></>}
+        {mode==='signup'&&<><div className="auth-title">🚀 Create your account</div><div className="auth-sub">Start your 3-day free trial. No credit card required.</div></>}
+        {mode==='reset'&&<><div className="auth-title">🔑 Reset password</div><div className="auth-sub">We'll send a reset link to your email.</div></>}
+        {err&&<div className="auth-err">⚠️ {err}</div>}
+        {ok&&<div className="auth-ok">{ok}</div>}
+        <div className="auth-field"><label>Email</label><input type="email" placeholder="you@example.com" value={email} onChange={e=>setEmail(e.target.value)} onKeyDown={handle} autoFocus/></div>
+        {mode!=='reset'&&<div className="auth-field"><label>Password</label><input type="password" placeholder={mode==='signup'?'Min. 6 characters':'Your password'} value={pw} onChange={e=>setPw(e.target.value)} onKeyDown={handle}/></div>}
+        {mode==='signin'&&<div className="auth-forgot"><button onClick={()=>{setMode('reset');reset();}}>Forgot password?</button></div>}
+        {mode==='signin'&&<button className="auth-btn" onClick={doSignIn} disabled={loading||!email||!pw}>{loading&&<span className="auth-spin"/>}Sign in</button>}
+        {mode==='signup'&&<button className="auth-btn" onClick={doSignUp} disabled={loading||!email||!pw}>{loading&&<span className="auth-spin"/>}Create free account</button>}
+        {mode==='reset'&&<button className="auth-btn" onClick={doReset} disabled={loading||!email}>{loading&&<span className="auth-spin"/>}Send reset link</button>}
+        <div className="auth-switch">
+          {mode==='signin'&&<>No account? <button onClick={()=>{setMode('signup');reset();}}>Sign up free →</button></>}
+          {mode==='signup'&&<>Have an account? <button onClick={()=>{setMode('signin');reset();}}>Sign in</button></>}
+          {mode==='reset'&&<><button onClick={()=>{setMode('signin');reset();}}>← Back to sign in</button></>}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function GenerateView({user,session,brand,daysLeft,subStatus}){
+  const [language,setLanguage]=useState('English');
+  const [template,setTemplate]=useState('value');
+  const [topic,setTopic]=useState('');
+  const [loading,setLoading]=useState(false);
+  const [content,setContent]=useState(null);
+  const [regenLoading,setRegenLoading]=useState({});
+  const [error,setError]=useState('');
+  const [canvaLoading,setCanvaLoading]=useState(null);
+  const canGenerate=daysLeft>0||subStatus==='active';
+
+  const generate=async()=>{
+    if(!topic.trim())return;
+    setLoading(true);setError('');setContent(null);
+    try{
+      const prompt=buildPrompt(brand,topic,language,template);
+      const res=await callGenerate([{role:'user',content:prompt}],session);
+      setContent(res);
+      await db.from('generations').insert({user_id:user.id,topic,language,template,content:res});
+    }catch(e){setError(e.message||'Generation failed. Please try again.');}
+    setLoading(false);
+  };
+
+  const regenPlatform=async(pid)=>{
+    if(!brand||!content)return;
+    setRegenLoading(r=>({...r,[pid]:true}));
+    try{
+      const prompt=`Regenerate ONLY the ${pid} content. Same brand, same topic, different angle and wording.\n\nBRAND: ${brand.business_name}\nTONE: ${brand.tone}\nTOPIC: ${topic}\nLANGUAGE: ${language}\n\nReturn ONLY valid JSON with just the ${pid} key.`;
+      const res=await callGenerate([{role:'user',content:prompt}],session);
+      setContent(c=>({...c,...res}));
+    }catch(e){}
+    setRegenLoading(r=>({...r,[pid]:false}));
+  };
+
+  const handleCanva=async(pid,postText)=>{
+    setCanvaLoading(pid);
+    try{
+      const r=await fetch('/api/canva-design',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({content:postText.slice(0,500),platform:pid,brandName:brand?.business_name,niche:brand?.niche})});
+      const d=await r.json();
+      window.open(d.canvaUrl||'https://www.canva.com/search/templates?q=social+media+post','_blank');
+    }catch(e){
+      window.open('https://www.canva.com/search/templates?q=social+media+post','_blank');
+    }
+    setCanvaLoading(null);
+  };
+
+  const exportAll=()=>{
+    if(!content)return;
+    let txt=`BRAND VOICE EXPORT\nTopic: ${topic}\nLanguage: ${language}\nDate: ${new Date().toLocaleDateString()}\n\n`;
+    if(content.linkedin)txt+=`── LINKEDIN ──\n${content.linkedin.post}\n\n${content.linkedin.hashtags}\n\n`;
+    if(content.instagram)txt+=`── INSTAGRAM ──\n${content.instagram.caption}\n\n${content.instagram.hashtags}\n\n`;
+    if(content.twitter)txt+=`── X / TWITTER ──\n${content.twitter.post}\n\n`;
+    if(content.facebook)txt+=`── FACEBOOK ──\n${content.facebook.post}\n\n`;
+    if(content.tiktok)txt+=`── TIKTOK SCRIPT ──\nHOOK: ${content.tiktok.hook}\n\nSCRIPT: ${content.tiktok.body}\n\nCTA: ${content.tiktok.cta}\n\n`;
+    const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([txt],{type:'text/plain'}));a.download=`brandvoice-${Date.now()}.txt`;a.click();
+  };
+
+  const startCheckout=async()=>{
+    try{
+      const r=await fetch('/api/create-checkout',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:user.email,userId:user.id})});
+      const d=await r.json();
+      if(d.url)window.location.href=d.url;
+    }catch(e){alert('Could not start checkout. Please try again.');}
+  };
+
+  return(
+    <div>
+      {!canGenerate&&(
+        <div className="main-inner">
+          <div className="paywall">
+            <div className="paywall-icon">🔒</div>
+            <div className="paywall-title">Your trial has ended</div>
+            <div className="paywall-sub">Subscribe to keep generating unlimited content for all 5 platforms.</div>
+            <div className="paywall-price">
+              <div className="paywall-amt"><sup>€</sup>19.99</div>
+              <div style={{fontSize:13,color:'var(--t3)',marginTop:6}}>per month · cancel anytime</div>
+              <div className="paywall-feats">
+                {['⚡ Unlimited generations','🌍 6 languages','📋 8 templates','↺ Regenerate any platform','📜 Content history','📤 Export .txt'].map(f=><div key={f}>{f}</div>)}
+              </div>
+            </div>
+            <button className="btn-generate" style={{maxWidth:320,margin:'0 auto'}} onClick={startCheckout}>Subscribe for €19.99/month →</button>
+          </div>
+        </div>
+      )}
+      {canGenerate&&loading&&(
+        <div className="loading-full">
+          <div className="spinner"/>
+          <div style={{fontSize:14,color:'var(--t2)'}}>✍️ Writing your content...</div>
+          <div className="loading-plats">💼 📸 🐦 👥 🎵</div>
+          <div style={{fontSize:12,color:'var(--t3)',marginTop:4}}>LinkedIn · Instagram · X · Facebook · TikTok</div>
+        </div>
+      )}
+      {canGenerate&&!loading&&content&&(
+        <div className="main-inner">
+          <div className="results-bar">
+            <div>
+              <div style={{fontFamily:"'Bricolage Grotesque',sans-serif",fontSize:18,fontWeight:700,color:'var(--t1)'}}>🎉 Your content is ready</div>
+              <div className="results-info">📌 {topic} · {language}</div>
+            </div>
+            <div className="results-actions">
+              <button className="btn-action" onClick={exportAll}>📤 Export .txt</button>
+              <button className="btn-action" onClick={()=>{setContent(null);setTopic('');}}>✏️ New topic</button>
+            </div>
+          </div>
+          {error&&<div className="notice-err">⚠️ {error}</div>}
+          {PLATS.map(p=>content[p.id]&&<PlatCard key={p.id} pid={p.id} content={content[p.id]} allContent={content} onRegen={regenPlatform} regenLoading={regenLoading} canvaLoading={canvaLoading} onCanva={handleCanva} topic={topic} language={language} user={user} onScheduled={()=>{}}/>)}
+          <button className="btn-generate" style={{marginTop:16}} onClick={()=>{setContent(null);setTopic('');}}>✨ Generate new content</button>
+        </div>
+      )}
+      {canGenerate&&!loading&&!content&&(
+        <div className="main-inner">
+          <div className="page-title">⚡ Generate content</div>
+          <div className="page-sub">Personalized posts for all 5 platforms in seconds.</div>
+          {daysLeft>0&&<div className="notice-warn">⏱️ {daysLeft} day{daysLeft!==1?'s':''} remaining in your free trial</div>}
+          {error&&<div className="notice-err">⚠️ {error}</div>}
+          <div className="gen-card">
+            <div className="gen-card-title">Settings</div>
+            <div className="two-col">
+              <div><label className="field-label">🌍 Language</label><select value={language} onChange={e=>setLanguage(e.target.value)}>{LANGUAGES.map(l=><option key={l}>{l}</option>)}</select></div>
+              <div><label className="field-label">📋 Content goal</label><select value={template} onChange={e=>setTemplate(e.target.value)}>{TEMPLATES.map(t=><option key={t.id} value={t.id}>{t.label}</option>)}</select></div>
+            </div>
+          </div>
+          <div className="gen-card">
+            <div className="gen-card-title">Topic</div>
+            <div className="examples-list">{EXAMPLE_TOPICS.map(e=><div key={e} className="ex" onClick={()=>setTopic(e)}>{e}</div>)}</div>
+            <div className="or-divider">— or write your own —</div>
+            <textarea rows={4} placeholder="E.g. How we helped a client 3x their revenue in 90 days..." value={topic} onChange={e=>setTopic(e.target.value)}/>
+          </div>
+          <button className="btn-generate" onClick={generate} disabled={!topic.trim()}>⚡ Generate for all 5 platforms →</button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function HistoryView({user}){
+  const [history,setHistory]=useState([]);
+  const [loading,setLoading]=useState(true);
+  const [selected,setSelected]=useState(null);
+
+  useEffect(()=>{
+    db.from('generations').select('*').eq('user_id',user.id).order('created_at',{ascending:false}).limit(20).then(({data})=>{setHistory(data||[]);setLoading(false);});
+  },[]);
+
+  if(loading)return <div className="main-inner"><div className="loading-full"><div className="spinner"/></div></div>;
+
+  return(
+    <div className="main-inner">
+      {selected?(
+        <>
+          <button className="btn-ob-back" onClick={()=>setSelected(null)}>← Back to history</button>
+          <div style={{fontFamily:"'Bricolage Grotesque',sans-serif",fontSize:18,fontWeight:700,color:'var(--t1)',marginBottom:4}}>📌 {selected.topic}</div>
+          <div style={{fontSize:12,color:'var(--t3)',marginBottom:20}}>{new Date(selected.created_at).toLocaleDateString()} · {selected.language} · {TEMPLATES.find(t=>t.id===selected.template)?.label||selected.template}</div>
+          {PLATS.map(p=>selected.content[p.id]&&<PlatCard key={p.id} pid={p.id} content={selected.content[p.id]} allContent={selected.content} onRegen={()=>{}} regenLoading={{}} canvaLoading={null} onCanva={(pid,text)=>window.open('https://www.canva.com/search/templates?q=social+media','_blank')} topic={selected.topic} language={selected.language} user={user} onScheduled={()=>{}}/>)}
+        </>
+      ):(
+        <>
+          <div className="page-title">📜 Content history</div>
+          <div className="page-sub">Your last 20 generations. Click any to view and copy.</div>
+          {!history.length?(
+            <div className="hist-empty">
+              <div className="hist-empty-icon">📭</div>
+              <div className="hist-empty-text">No history yet.<br/>Generate your first content to see it here.</div>
+            </div>
+          ):(
+            <div className="hist-list">
+              {history.map(h=>(
+                <div key={h.id} className="hist-item" onClick={()=>setSelected(h)}>
+                  <div className="hist-topic">{h.topic}</div>
+                  <div className="hist-meta">
+                    <span>📅 {new Date(h.created_at).toLocaleDateString()}</span>
+                    <span>🌍 {h.language}</span>
+                    <span>{TEMPLATES.find(t=>t.id===h.template)?.label||h.template}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </>
+      )}
+    </div>
+  );
+}
+
+function ScheduledView({user}){
+  const [posts,setPosts]=useState([]);
+  const [loading,setLoading]=useState(true);
+  const [duePosts,setDuePosts]=useState([]);
+  const [view,setView]=useState('list');
+
+  const load=async()=>{
+    const{data}=await db.from('scheduled_posts').select('*').eq('user_id',user.id).order('scheduled_for',{ascending:true});
+    const all=data||[];
+    setPosts(all);
+    const now=new Date();
+    const due=all.filter(p=>p.status==='scheduled'&&new Date(p.scheduled_for)<=now);
+    setDuePosts(due);
+    if(due.length>0){
+      due.forEach(async p=>{
+        await db.from('scheduled_posts').update({status:'due'}).eq('id',p.id);
+      });
+    }
+    setLoading(false);
+  };
+
+  useEffect(()=>{load();},[]);
+
+  const cancel=async(id)=>{
+    await db.from('scheduled_posts').update({status:'cancelled'}).eq('id',id);
+    load();
+  };
+
+  const markPosted=async(id)=>{
+    await db.from('scheduled_posts').update({status:'posted'}).eq('id',id);
+    load();
+  };
+
+  const getStatusBadge=(status)=>{
+    const map={scheduled:'scheduled',due:'due',posted:'posted',cancelled:'cancelled'};
+    const label={scheduled:'🕐 Scheduled',due:'⏰ Time to post!',posted:'✅ Posted',cancelled:'✕ Cancelled'};
+    return <span className={`sched-status ${map[status]||'scheduled'}`}>{label[status]||status}</span>;
+  };
+
+  const getPlatIcon=(pid)=>{
+    const p=PLATS.find(x=>x.id===pid);
+    return p?<div style={{width:22,height:22,borderRadius:5,background:p.bg,color:p.color,display:'flex',alignItems:'center',justifyContent:'center',fontSize:9,fontWeight:700,flexShrink:0}}>{p.letter}</div>:null;
+  };
+
+  if(loading)return <div className="main-inner"><div className="loading-full"><div className="spinner"/></div></div>;
+
+  return(
+    <div className="main-inner">
+      <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:6,flexWrap:'wrap',gap:10}}>
+        <div>
+          <div className="page-title">📅 Scheduled posts</div>
+          <div className="page-sub">{posts.filter(p=>p.status==='scheduled').length} upcoming · {posts.filter(p=>p.status==='posted').length} posted</div>
+        </div>
+        <div style={{display:'flex',gap:8}}>
+          <button className={`btn-sched-act ${view==='list'?'border-color:var(--blue)':''}`} style={view==='list'?{borderColor:'var(--blue)',color:'var(--blue)'}:{}} onClick={()=>setView('list')}>☰ List</button>
+          <button className="btn-sched-act" style={view==='cal'?{borderColor:'var(--blue)',color:'var(--blue)'}:{}} onClick={()=>setView('cal')}>📆 Calendar</button>
+        </div>
+      </div>
+
+      {duePosts.length>0&&(
+        <div className="due-banner">
+          <div className="due-banner-text">⏰ {duePosts.length} post{duePosts.length>1?'s are':' is'} ready to go! Time to post.</div>
+          <button className="btn-sched-post" onClick={()=>{}}>View due posts ↓</button>
+        </div>
+      )}
+
+      {view==='list'&&(
+        <div>
+          {!posts.length?(
+            <div className="hist-empty">
+              <div className="hist-empty-icon">📅</div>
+              <div className="hist-empty-text">No scheduled posts yet.<br/>Generate content and click "📅 Schedule" on any platform card.</div>
+            </div>
+          ):(
+            <div className="sched-list">
+              {posts.map(post=>(
+                <div key={post.id} className="sched-item">
+                  <div className="sched-item-top">
+                    <div className="sched-item-left">
+                      {getPlatIcon(post.platform)}
+                      <div>
+                        <div className="sched-time">{new Date(post.scheduled_for).toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short',year:'numeric'})} at {new Date(post.scheduled_for).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'})}</div>
+                        <div style={{fontSize:11,color:'var(--t3)',marginTop:2}}>{PLATS.find(p=>p.id===post.platform)?.name} · {post.language}</div>
+                      </div>
+                    </div>
+                    {getStatusBadge(post.status)}
+                  </div>
+                  <div className="sched-content-preview">{post.content}</div>
+                  <div className="sched-actions">
+                    {(post.status==='scheduled'||post.status==='due')&&(
+                      <>
+                        <button className="btn-sched-post" onClick={()=>{navigator.clipboard.writeText(post.content);const p=PLATS.find(x=>x.id===post.platform);const urls={twitter:'https://twitter.com/compose/tweet',linkedin:'https://www.linkedin.com/feed/',facebook:'https://www.facebook.com/',instagram:'https://www.instagram.com/',tiktok:'https://www.tiktok.com/upload'};setTimeout(()=>window.open(urls[post.platform],'_blank'),300);alert('📋 Content copied! Opening '+p?.name+'...');}}>▶ Post now</button>
+                        <button className="btn-sched-act" onClick={()=>{navigator.clipboard.writeText(post.content);}}>📋 Copy</button>
+                        <button className="btn-sched-cancel" onClick={()=>cancel(post.id)}>Cancel</button>
+                      </>
+                    )}
+                    {post.status==='due'&&<button className="btn-sched-act" style={{color:'#6EE7B7',borderColor:'rgba(16,185,129,0.2)'}} onClick={()=>markPosted(post.id)}>✅ Mark as posted</button>}
+                    {post.status==='posted'&&<button className="btn-sched-act" onClick={()=>markPosted(post.id)}>✅ Posted</button>}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {view==='cal'&&(
+        <div>
+          <div style={{fontFamily:"'Bricolage Grotesque',sans-serif",fontSize:16,fontWeight:700,color:'var(--t1)',marginBottom:4,textAlign:'center'}}>
+            {new Date().toLocaleDateString('en-GB',{month:'long',year:'numeric'})}
+          </div>
+          <div className="cal-grid">
+            {['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].map(d=><div key={d} className="cal-day-name">{d}</div>)}
+            {(()=>{
+              const now=new Date();
+              const y=now.getFullYear(),m=now.getMonth();
+              const first=new Date(y,m,1);
+              const last=new Date(y,m+1,0);
+              const startDow=(first.getDay()+6)%7;
+              const days=[];
+              for(let i=0;i<startDow;i++)days.push({date:new Date(y,m,1-startDow+i),other:true});
+              for(let i=1;i<=last.getDate();i++)days.push({date:new Date(y,m,i),other:false});
+              while(days.length%7!==0)days.push({date:new Date(y,m+1,days.length-last.getDate()-startDow+1),other:true});
+              return days.map((d,i)=>{
+                const isToday=!d.other&&d.date.toDateString()===now.toDateString();
+                const dayPosts=posts.filter(p=>{const pd=new Date(p.scheduled_for);return pd.getFullYear()===d.date.getFullYear()&&pd.getMonth()===d.date.getMonth()&&pd.getDate()===d.date.getDate();});
+                return(
+                  <div key={i} className={`cal-day ${isToday?'today':''} ${d.other?'other-month':''}`}>
+                    <div className="cal-day-num">{d.date.getDate()}</div>
+                    {dayPosts.slice(0,2).map(p=><div key={p.id} className="cal-event">{PLATS.find(x=>x.id===p.platform)?.name?.split('/')[0]||p.platform}</div>)}
+                    {dayPosts.length>2&&<div className="cal-event">+{dayPosts.length-2}</div>}
+                  </div>
+                );
+              });
+            })()}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+  const PLATFORM_INFO=[
+    {id:'twitter',icon:'🐦',name:'X / Twitter',color:'#8899CC',bg:'#1A1A2E',how:'Opens X with your post pre-filled. You click Tweet.',status:'works',label:'How to post'},
+    {id:'linkedin',icon:'💼',name:'LinkedIn',color:'#5B9BD5',bg:'#1E3A5F',how:'Opens LinkedIn share dialog with your content. You click Post.',status:'works',label:'How to post'},
+    {id:'facebook',icon:'👥',name:'Facebook',color:'#6B8EF0',bg:'#1A2260',how:'Opens Facebook share dialog with your content. You click Post.',status:'works',label:'How to post'},
+    {id:'instagram',icon:'📸',name:'Instagram',color:'#E879D0',bg:'#3D1A35',how:'Copies your caption. Open Instagram on your phone, paste and post.',status:'copy',label:'Copy & paste'},
+    {id:'tiktok',icon:'🎵',name:'TikTok',color:'#40C0B0',bg:'#0A2525',how:'Copies your script. Open TikTok on your phone, use as teleprompter.',status:'copy',label:'Copy & paste'},
+    {id:'canva',icon:'🎨',name:'Canva',color:'#00C4CC',bg:'#0A2525',how:'Click "Create Canva design" on any post card. We generate a design prompt and open Canva with matching templates automatically.',status:'ai',label:'AI-powered'},
+  ];
+
+  return(
+    <div className="main-inner">
+      <div className="page-title">🔗 How to publish your content</div>
+      <div className="page-sub">Here's exactly how to post from Brand Voice to each platform.</div>
+      <div className="notice-info" style={{marginBottom:20}}>
+        💡 After generating content, every platform card has a <strong style={{color:'var(--t1)'}}>Post</strong> or <strong style={{color:'var(--t1)'}}>Copy</strong> button built in. Use the guide below to understand how each one works.
+      </div>
+      <div className="connect-grid">
+        {PLATFORM_INFO.map(p=>(
+          <div key={p.id} className="connect-card">
+            <div className="connect-top">
+              <div className="connect-plat">
+                <div className="connect-icon" style={{background:p.bg,color:p.color,fontSize:16}}>{p.icon}</div>
+                <div>
+                  <div className="connect-name">{p.name}</div>
+                </div>
+              </div>
+              <div className={`badge-connected ${p.status==='works'?'':''}` } style={
+                p.status==='works'?{background:'rgba(16,185,129,0.1)',border:'1px solid rgba(16,185,129,0.2)',color:'#6EE7B7'}:
+                p.status==='copy'?{background:'rgba(245,158,11,0.1)',border:'1px solid rgba(245,158,11,0.2)',color:'#D4A853'}:
+                {background:'rgba(0,196,204,0.1)',border:'1px solid rgba(0,196,204,0.2)',color:'#40C0B0'}
+              }>
+                {p.status==='works'?'✓ One click':p.status==='copy'?'📱 Mobile':'🎨 AI'}
+              </div>
+            </div>
+            <div className="connect-desc">{p.how}</div>
+            <div style={{marginTop:10,padding:'7px 12px',background:'var(--s2)',borderRadius:7,fontSize:11.5,color:'var(--t3)',fontWeight:400}}>
+              {p.status==='works'&&'Go to Generate → click ▶ Post on '+p.name+' card'}
+              {p.status==='copy'&&'Go to Generate → click 📱 Copy for '+p.name+' card'}
+              {p.status==='ai'&&'Go to Generate → click 🎨 Create Canva design on any card'}
+            </div>
+          </div>
+        ))}
+      </div>
+      <div style={{marginTop:20,background:'var(--s1)',border:'1px solid var(--b1)',borderRadius:12,padding:18}}>
+        <div style={{fontSize:13,fontWeight:700,color:'var(--t1)',marginBottom:10}}>🎨 How Canva design generation works</div>
+        <div style={{fontSize:13,color:'var(--t2)',lineHeight:1.75,fontWeight:300}}>
+          1. Generate your content for any platform<br/>
+          2. Click <strong style={{color:'var(--t1)'}}>🎨 Create Canva design for this post</strong> on any card<br/>
+          3. Our AI reads your post and generates the perfect design brief<br/>
+          4. Canva opens automatically with matching templates pre-searched<br/>
+          5. Pick a template, customize and download your visual
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function AccountView({user,daysLeft,subStatus}){
+  const startCheckout=async()=>{
+    const r=await fetch('/api/create-checkout',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:user.email,userId:user.id})});
+    const d=await r.json();
+    if(d.url)window.location.href=d.url;
+  };
+  return(
+    <div className="main-inner">
+      <div className="page-title">👤 Account</div>
+      <div className="page-sub">Manage your subscription and account settings.</div>
+      <div className="plan-card">
+        <div className="plan-info">
+          <div className="plan-name">{subStatus==='active'?'Pro Plan':'Free Trial'}</div>
+          <div className="plan-desc">{subStatus==='active'?'All features unlocked. Cancel anytime.':daysLeft>0?`${daysLeft} day${daysLeft!==1?'s':''} remaining — then €19.99/month`:'Trial ended — subscribe to continue'}</div>
+        </div>
+        {subStatus==='active'?<div style={{background:'rgba(16,185,129,0.1)',border:'1px solid rgba(16,185,129,0.2)',borderRadius:100,padding:'5px 14px',fontSize:12,color:'#6EE7B7',fontWeight:600}}>✓ Active</div>:<button className="btn-blue-sm" onClick={startCheckout}>Upgrade →</button>}
+      </div>
+      <div className="settings-section">
+        <div className="settings-title">Account details</div>
+        <div className="settings-row"><span className="settings-label">Email</span><span className="settings-value">{user.email}</span></div>
+        <div className="settings-row"><span className="settings-label">Member since</span><span className="settings-value">{new Date(user.created_at).toLocaleDateString()}</span></div>
+        <div className="settings-row"><span className="settings-label">Plan</span><span className="settings-value">{subStatus==='active'?'Pro — €19.99/month':'Free Trial'}</span></div>
+      </div>
+      {subStatus==='active'&&(
+        <div className="settings-section">
+          <div className="settings-title">Billing</div>
+          <div className="settings-row"><span className="settings-label">Manage subscription</span><button className="btn-sm" onClick={()=>alert('Billing portal coming soon. Email support@brand-voice.space to manage your subscription.')}>Manage →</button></div>
+          <div className="settings-row"><span className="settings-label">Cancel subscription</span><button className="btn-sm" style={{color:'#FCA5A5',borderColor:'rgba(239,68,68,0.2)'}} onClick={()=>alert('To cancel, email support@brand-voice.space')}>Cancel</button></div>
+        </div>
+      )}
+      <div className="settings-section">
+        <div className="settings-title">Support</div>
+        <div style={{fontSize:13,color:'var(--t2)',lineHeight:1.7,fontWeight:300}}>
+          For any questions or issues:<br/>
+          📧 <a href="mailto:support@brand-voice.space" style={{color:'var(--blue)',textDecoration:'none'}}>support@brand-voice.space</a>
+        </div>
+      </div>
+      <button className="btn-sm" style={{width:'100%',padding:11,marginTop:8,fontSize:13}} onClick={()=>db.auth.signOut()}>Sign out</button>
+    </div>
+  );
+}
+
+function OnboardingView({user,onComplete}){
+  const [step,setStep]=useState(1);
+  const [data,setData]=useState({business_name:'',niche:'',product:'',audience:'',tone:'professional',keywords:''});
+  const set=f=>e=>setData(d=>({...d,[f]:e.target.value}));
+  const d=data;
+
+  const save=async()=>{
+    await db.from('profiles').upsert({id:user.id,...d,updated_at:new Date().toISOString()});
+    onComplete(d);
+  };
+
+  return(
+    <div className="main-inner">
+      <div className="ob-wrap">
+        <div className="ob-prog">{[1,2,3,4].map((_,i)=><div key={i} className={`ob-pd ${i+1<step?'done':i+1===step?'active':''}`}/>)}</div>
+        {step>1&&<button className="btn-ob-back" onClick={()=>setStep(s=>s-1)}>← Back</button>}
+        {step===1&&(
+          <>
+            <div className="ob-slabel">Step 1 of 4</div>
+            <div className="ob-stitle">👋 Set up your brand</div>
+            <div className="ob-ssub">Fill this in once. Every post will be personalized to your brand, voice and audience.</div>
+            <div style={{marginBottom:16}}><label className="field-label">Business or brand name</label><input type="text" placeholder="E.g. Studio Bloom, Alex Chen, Growthly..." value={d.business_name} onChange={set('business_name')} autoFocus/></div>
+            <button className="btn-ob-next" onClick={()=>setStep(2)} disabled={!d.business_name}>Continue →</button>
+          </>
+        )}
+        {step===2&&(
+          <>
+            <div className="ob-slabel">Step 2 of 4</div>
+            <div className="ob-stitle">🛍️ What do you offer?</div>
+            <div style={{marginBottom:16}}><label className="field-label">Product or service</label><textarea rows={4} placeholder="E.g. 1:1 business coaching for entrepreneurs who want to scale without burning out..." value={d.product} onChange={set('product')}/><div style={{fontSize:11.5,color:'var(--t3)',marginTop:5,fontWeight:300}}>Write it as you'd explain it to a friend.</div></div>
+            <div style={{marginBottom:16}}><label className="field-label">Industry or niche</label><input type="text" placeholder="E.g. Business coaching, E-commerce, SaaS, Health & wellness..." value={d.niche} onChange={set('niche')}/></div>
+            <button className="btn-ob-next" onClick={()=>setStep(3)} disabled={!d.product||!d.niche}>Continue →</button>
+          </>
+        )}
+        {step===3&&(
+          <>
+            <div className="ob-slabel">Step 3 of 4</div>
+            <div className="ob-stitle">🎯 Who are you talking to?</div>
+            <div style={{marginBottom:16}}><label className="field-label">Target audience</label><input type="text" placeholder="E.g. Freelance designers 25–40, small business owners in retail..." value={d.audience} onChange={set('audience')}/><div style={{fontSize:11.5,color:'var(--t3)',marginTop:5,fontWeight:300}}>The more specific, the more relevant your content.</div></div>
+            <div style={{marginBottom:16}}><label className="field-label">Tone of voice</label><div className="ob-tone-grid">{TONES.map(t=><div key={t.id} className={`ob-tone ${d.tone===t.id?'sel':''}`} onClick={()=>setData(b=>({...b,tone:t.id}))}><div className="ob-tone-name">{t.name}</div><div className="ob-tone-desc">{t.desc}</div></div>)}</div></div>
+            <button className="btn-ob-next" onClick={()=>setStep(4)} disabled={!d.audience}>Continue →</button>
+          </>
+        )}
+        {step===4&&(
+          <>
+            <div className="ob-slabel">Step 4 of 4</div>
+            <div className="ob-stitle">🔑 Final touches</div>
+            <div style={{marginBottom:16}}><label className="field-label">Keywords <span style={{color:'var(--t3)',fontWeight:300,textTransform:'none',letterSpacing:0}}>optional</span></label><input type="text" placeholder="growth, mindset, productivity, scaling..." value={d.keywords} onChange={set('keywords')}/><div style={{fontSize:11.5,color:'var(--t3)',marginTop:5,fontWeight:300}}>These get woven naturally into every post.</div></div>
+            <button className="btn-ob-next" onClick={save}>Save & start generating →</button>
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function App(){
+  const [user,setUser]=useState(null);
+  const [session,setSession]=useState(null);
+  const [authReady,setAuthReady]=useState(false);
+  const [brand,setBrand]=useState(null);
+  const [brandLoaded,setBrandLoaded]=useState(false);
+  const [subStatus,setSubStatus]=useState(null);
+  const [page,setPage]=useState('generate');
+  const daysLeft=trialDaysLeft(user);
+
+  useEffect(()=>{
+    db.auth.getSession().then(({data:{session}})=>{
+      setUser(session?.user||null);
+      setSession(session||null);
+      setAuthReady(true);
+    });
+    const{data:{subscription}}=db.auth.onAuthStateChange((_,session)=>{
+      setUser(session?.user||null);
+      setSession(session||null);
+    });
+    const params=new URLSearchParams(window.location.search);
+    if(params.get('payment')==='success')setPage('account');
+    return()=>subscription.unsubscribe();
+  },[]);
+
+  useEffect(()=>{
+    if(!user){setBrand(null);setBrandLoaded(false);return;}
+    db.from('profiles').select('*').eq('id',user.id).single().then(({data})=>{setBrand(data||null);setBrandLoaded(true);});
+    db.from('subscriptions').select('status').eq('user_id',user.id).single().then(({data})=>{if(data)setSubStatus(data.status);});
+  },[user]);
+
+  if(!authReady)return <div className="loading-full"><div className="spinner"/></div>;
+  if(!user)return <AuthView onAuth={u=>setUser(u)}/>;
+  if(!brandLoaded)return <div className="loading-full"><div className="spinner"/><div style={{fontSize:13,color:'var(--t3)'}}>Loading your brand...</div></div>;
+
+  const NAV_ITEMS=[
+    {id:'generate',icon:'⚡',label:'Generate'},
+    {id:'scheduled',icon:'📅',label:'Scheduled'},
+    {id:'history',icon:'📜',label:'History'},
+    {id:'connect',icon:'🔗',label:'Connect'},
+    {id:'account',icon:'👤',label:'Account'},
+  ];
+
+  return(
+    <div id="root">
+      <div className="topbar">
+        <a className="tb-logo" href="/">
+          <div className="logo-b">B</div>
+          <span className="tb-name">Brand Voice</span>
+        </a>
+        <div className="tb-right">
+          <span className="tb-user">{user.email}</span>
+          {daysLeft>0&&subStatus!=='active'&&<div style={{padding:'4px 10px',background:'rgba(245,158,11,0.1)',border:'1px solid rgba(245,158,11,0.2)',borderRadius:7,fontSize:11,color:'#D4A853',fontWeight:600}}>⏱ {daysLeft}d trial</div>}
+          <button className="btn-sm" onClick={()=>db.auth.signOut()}>Sign out</button>
+        </div>
+      </div>
+      <div className="app-layout">
+        <div className="sidebar">
+          <div className="sidebar-section">
+            <div className="sidebar-label">Menu</div>
+            {NAV_ITEMS.map(item=>(
+              <button key={item.id} className={`nav-item ${page===item.id?'active':''}`} onClick={()=>setPage(item.id)}>
+                <span className="nav-icon">{item.icon}</span>
+                {item.label}
+              </button>
+            ))}
+          </div>
+          <div style={{padding:'0 12px',marginBottom:16}}>
+            <div className="sidebar-label">Brand</div>
+            <button className="nav-item" onClick={()=>setBrand(null)}>
+              <span className="nav-icon">⚙️</span>
+              Edit brand profile
+            </button>
+          </div>
+          <div className="sidebar-bottom">
+            <div className="sub-badge">
+              <div className={`sub-dot ${subStatus==='active'?'active':daysLeft>0?'trial':'expired'}`}/>
+              <div className="sub-text">
+                {subStatus==='active'?'Pro plan active':daysLeft>0?`Trial: ${daysLeft}d left`:'Trial ended'}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="main">
+          {!brand?(
+            <OnboardingView user={user} onComplete={b=>setBrand(b)}/>
+          ):page==='generate'?(
+            <GenerateView user={user} session={session} brand={brand} daysLeft={daysLeft} subStatus={subStatus}/>
+          ):page==='scheduled'?(
+            <ScheduledView user={user}/>
+          ):page==='history'?(
+            <HistoryView user={user}/>
+          ):page==='connect'?(
+            <ConnectView/>
+          ):(
+            <AccountView user={user} daysLeft={daysLeft} subStatus={subStatus}/>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.render(<App/>,document.getElementById('root'));
+</script>
+</body>
+</html>

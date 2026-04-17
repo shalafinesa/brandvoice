@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Brand Voice — Coming Soon</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Manrope',sans-serif;background:#0D2B1F;color:#fff;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px;text-align:center}
+.logo{display:flex;align-items:center;gap:12px;margin-bottom:48px;justify-content:center}
+.logo-icon{width:44px;height:44px;background:#52B788;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px}
+.logo-sub{font-size:10px;font-weight:700;color:rgba(255,255,255,0.4);letter-spacing:2px;text-transform:uppercase;display:block;line-height:1.2;text-align:left}
+.logo-name{font-family:'Fraunces',serif;font-weight:600;font-size:20px;color:#fff;display:block;line-height:1.2;text-align:left}
+.badge{display:inline-flex;align-items:center;gap:8px;background:rgba(82,183,136,0.12);border:1px solid rgba(82,183,136,0.25);border-radius:100px;padding:7px 18px;margin-bottom:32px}
+.badge-dot{width:7px;height:7px;border-radius:50%;background:#52B788;animation:pulse 2s ease-in-out infinite;flex-shrink:0}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.35}}
+.badge-text{font-size:12px;font-weight:600;color:#52B788;letter-spacing:0.8px}
+h1{font-family:'Fraunces',serif;font-size:clamp(36px,6vw,64px);font-weight:600;line-height:1.1;letter-spacing:-1px;margin-bottom:20px;color:#fff}
+h1 em{font-style:italic;color:#52B788}
+p{font-size:16px;color:rgba(255,255,255,0.5);line-height:1.8;max-width:480px;margin-bottom:40px;font-weight:300}
+.notify-form{display:flex;gap:10px;max-width:420px;width:100%;flex-wrap:wrap;justify-content:center;margin-bottom:16px}
+.notify-form input{flex:1;min-width:220px;padding:13px 16px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:10px;font-family:'Manrope',sans-serif;font-size:14px;color:#fff;outline:none;transition:border-color 0.2s}
+.notify-form input::placeholder{color:rgba(255,255,255,0.3)}
+.notify-form input:focus{border-color:#52B788}
+.notify-btn{padding:13px 24px;background:#52B788;color:#0D2B1F;border:none;border-radius:10px;font-family:'Manrope',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all 0.2s;white-space:nowrap}
+.notify-btn:hover{background:#62CC9A;transform:translateY(-1px)}
+.note{font-size:12px;color:rgba(255,255,255,0.2);margin-bottom:48px;font-weight:300}
+.features{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-bottom:48px}
+.feat{padding:8px 18px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:100px;font-size:12px;color:rgba(255,255,255,0.45)}
+.social{display:flex;gap:20px;justify-content:center}
+.social a{font-size:13px;color:rgba(255,255,255,0.3);text-decoration:none;transition:color 0.2s;font-weight:400}
+.social a:hover{color:#52B788}
+.ok-msg{font-size:14px;color:#52B788;margin-bottom:16px;display:none}
+</style>
+</head>
+<body>
+
+<div class="logo">
+  <div class="logo-icon">✍️</div>
+  <div>
+    <span class="logo-sub">Finesa Shala App</span>
+    <span class="logo-name">Brand Voice</span>
+  </div>
+</div>
+
+<div class="badge">
+  <div class="badge-dot"></div>
+  <span class="badge-text">🔧 Improving the product</span>
+</div>
+
+<h1>Back soon,<br/><em>better than ever.</em></h1>
+
+<p>We're working on some improvements to make Brand Voice even better for you. Leave your email and you'll be the first to know when we're back. 🚀</p>
+
+<div class="notify-form">
+  <input type="email" id="email-input" placeholder="your@email.com"/>
+  <button class="notify-btn" onclick="notify()">Notify me →</button>
+</div>
+<div class="ok-msg" id="ok-msg">✅ You're on the list! We'll email you when we're back.</div>
+<div class="note">No spam. Just one email when we relaunch.</div>
+
+<div class="features">
+  <div class="feat">💼 LinkedIn</div>
+  <div class="feat">📸 Instagram</div>
+  <div class="feat">🐦 X / Twitter</div>
+  <div class="feat">👥 Facebook</div>
+  <div class="feat">🎵 TikTok Scripts</div>
+</div>
+
+<div class="social">
+  <a href="https://x.com" target="_blank">Follow updates on X →</a>
+  <a href="https://linkedin.com" target="_blank">LinkedIn →</a>
+</div>
+
+<script>
+function notify(){
+  const email=document.getElementById('email-input').value;
+  if(!email||!email.includes('@'))return;
+  // Store in localStorage for now — replace with your email service later
+  const list=JSON.parse(localStorage.getItem('waitlist')||'[]');
+  if(!list.includes(email))list.push(email);
+  localStorage.setItem('waitlist',JSON.stringify(list));
+  document.querySelector('.notify-form').style.display='none';
+  document.getElementById('ok-msg').style.display='block';
+}
+</script>
+
+</body>
+</html>
