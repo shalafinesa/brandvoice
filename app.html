@@ -90,9 +90,9 @@ textarea{resize:none;line-height:1.55}
 .pc:hover{border-color:var(--b2)}
 .pc-head{display:flex;align-items:center;justify-content:space-between;padding:11px 14px;border-bottom:1px solid var(--b1)}
 .pc-left{display:flex;align-items:center;gap:8px}
-.pc-icon{width:26px;height:26px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0}
-.pc-name{font-weight:600;font-size:12.5px}
-.pc-char{font-size:10px;color:var(--t3);margin-left:4px}
+.pc-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0}
+.pc-name{font-weight:700;font-size:15px}
+.pc-char{font-size:11px;color:var(--t3);margin-left:6px}
 .pc-btns{display:flex;gap:5px}
 .btn-regen{padding:4px 9px;background:var(--s2);border:1px solid var(--b2);border-radius:5px;font-size:11px;font-weight:500;cursor:pointer;color:var(--t2);font-family:'DM Sans',sans-serif;transition:all 0.15s}
 .btn-regen:hover{border-color:rgba(91,138,247,0.3);color:var(--blue)}
@@ -103,8 +103,8 @@ textarea{resize:none;line-height:1.55}
 .btn-copy:hover{background:var(--s2)}
 .btn-copy.copied{background:rgba(16,185,129,0.08);border-color:rgba(16,185,129,0.2);color:#6EE7B7}
 .pc-body{padding:14px}
-.pc-text{font-size:13px;line-height:1.82;color:#BFC4DC;white-space:pre-wrap;word-break:break-word;font-weight:300}
-.pc-tags{margin-top:9px;font-size:12px;color:#6B7FBB;line-height:1.68;word-break:break-word}
+.pc-text{font-size:14.5px;line-height:1.82;color:#BFC4DC;white-space:pre-wrap;word-break:break-word;font-weight:300}
+.pc-tags{margin-top:9px;font-size:13px;color:#6B7FBB;line-height:1.68;word-break:break-word}
 .tk-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--t3);margin-bottom:5px;margin-top:14px}
 .tk-label:first-child{margin-top:0}
 
@@ -274,11 +274,53 @@ textarea{resize:none;line-height:1.55}
 .cal-day.other-month{opacity:0.35}
 .cal-day-num{font-size:11px;font-weight:600;color:var(--t2);margin-bottom:4px}
 .cal-event{font-size:9px;padding:2px 5px;border-radius:3px;background:rgba(91,138,247,0.15);color:var(--blue);margin-bottom:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+/* ── MOBILE NAV ── */
+.mobile-nav{display:none}
+@media(max-width:768px){
+  html,body{height:100%;overflow:hidden}
+  .topbar{padding:0 14px;height:50px}
+  .tb-name{font-size:14px}
+  .tb-user{display:none}
+  .btn-sm{font-size:11px;padding:5px 10px}
+  .logo-b{width:26px;height:26px;font-size:14px}
+  .app-layout{flex-direction:column}
+  .sidebar{display:none}
+  .main{flex:1;overflow-y:auto;padding-bottom:68px}
+  .main-inner{padding:14px 14px 20px}
+  .mobile-nav{display:flex;position:fixed;bottom:0;left:0;right:0;z-index:80;background:var(--s1);border-top:1px solid var(--b1);height:58px;align-items:stretch}
+  .mobile-nav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;cursor:pointer;background:none;border:none;font-family:'DM Sans',sans-serif;transition:all 0.15s;padding:6px 4px}
+  .mobile-nav-item.active{background:rgba(91,138,247,0.08)}
+  .mobile-nav-icon{font-size:19px;line-height:1}
+  .mobile-nav-label{font-size:9px;font-weight:600;color:var(--t3);letter-spacing:0.3px}
+  .mobile-nav-item.active .mobile-nav-label{color:var(--blue)}
+  .pc-btns{flex-wrap:wrap;gap:4px}
+  .pc-btns button{font-size:10px;padding:3px 7px}
+  .gen-card{padding:14px}
+  .two-col{grid-template-columns:1fr}
+  .modal-overlay{align-items:flex-end;padding:0}
+  .modal-box{max-width:100%;border-radius:18px 18px 0 0;margin:0;position:fixed;bottom:0;left:0;right:0;max-height:88vh}
+  .auth-wrap{padding:14px;align-items:flex-start;justify-content:center}
+  .auth-box{margin:0;padding:28px 20px;border-radius:16px;width:100%;max-width:100%}
+  .ob-wrap{max-width:100%}
+  .connect-grid{grid-template-columns:1fr}
+  .sched-item{padding:12px}
+  .cal-day{min-height:42px;padding:3px}
+  .cal-grid{gap:2px}
+  .results-bar{flex-direction:column;align-items:flex-start;gap:10px}
+  .results-actions{flex-wrap:wrap}
+  .page-title{font-size:18px}
+  .paywall-price{padding:18px 20px}
+  .paywall-amt{font-size:42px}
+  .plat-selector{grid-template-columns:repeat(3,1fr)}
+  .ob-tone-grid{grid-template-columns:1fr 1fr}
+  .sched-actions{flex-wrap:wrap}
+}
 </style>
 </head>
 <body>
 <div id="root"></div>
 <script type="text/babel">
+const {useState,useEffect,useCallback}=React;
 const var_amber='#F59E0B';
 
 /* ── HELPERS ── */
@@ -719,7 +761,7 @@ function HistoryView({user}){
     db.from('generations').select('*').eq('user_id',user.id).order('created_at',{ascending:false}).limit(20).then(({data})=>{setHistory(data||[]);setLoading(false);});
   },[]);
 
-  if(loading)return <div className="main-inner"><div className="loading-full"><div className="spinner"/></div></div>;
+  if(loading)return(<div className="main-inner"><div className="loading-full"><div className="spinner"/></div></div>);
 
   return(
     <div className="main-inner">
@@ -803,7 +845,7 @@ function ScheduledView({user}){
     return p?<div style={{width:22,height:22,borderRadius:5,background:p.bg,color:p.color,display:'flex',alignItems:'center',justifyContent:'center',fontSize:9,fontWeight:700,flexShrink:0}}>{p.letter}</div>:null;
   };
 
-  if(loading)return <div className="main-inner"><div className="loading-full"><div className="spinner"/></div></div>;
+  if(loading)return(<div className="main-inner"><div className="loading-full"><div className="spinner"/></div></div>);
 
   return(
     <div className="main-inner">
@@ -900,6 +942,8 @@ function ScheduledView({user}){
     </div>
   );
 }
+
+function ConnectView(){
   const PLATFORM_INFO=[
     {id:'twitter',icon:'🐦',name:'X / Twitter',color:'#8899CC',bg:'#1A1A2E',how:'Opens X with your post pre-filled. You click Tweet.',status:'works',label:'How to post'},
     {id:'linkedin',icon:'💼',name:'LinkedIn',color:'#5B9BD5',bg:'#1E3A5F',how:'Opens LinkedIn share dialog with your content. You click Post.',status:'works',label:'How to post'},
@@ -1086,9 +1130,9 @@ function App(){
     db.from('subscriptions').select('status').eq('user_id',user.id).single().then(({data})=>{if(data)setSubStatus(data.status);});
   },[user]);
 
-  if(!authReady)return <div className="loading-full"><div className="spinner"/></div>;
-  if(!user)return <AuthView onAuth={u=>setUser(u)}/>;
-  if(!brandLoaded)return <div className="loading-full"><div className="spinner"/><div style={{fontSize:13,color:'var(--t3)'}}>Loading your brand...</div></div>;
+  if(!authReady)return(<div className="loading-full"><div className="spinner"/></div>);
+  if(!user)return(<AuthView onAuth={u=>setUser(u)}/>);
+  if(!brandLoaded)return(<div className="loading-full"><div className="spinner"/><div style={{fontSize:13,color:'var(--t3)'}}>Loading your brand...</div></div>);
 
   const NAV_ITEMS=[
     {id:'generate',icon:'⚡',label:'Generate'},
@@ -1153,6 +1197,15 @@ function App(){
             <AccountView user={user} daysLeft={daysLeft} subStatus={subStatus}/>
           )}
         </div>
+      </div>
+      <div className="mobile-nav">
+        {[{id:'generate',icon:'⚡',label:'Generate'},{id:'scheduled',icon:'📅',label:'Scheduled'},{id:'history',icon:'📜',label:'History'},{id:'connect',icon:'🔗',label:'Connect'},{id:'account',icon:'👤',label:'Account'}].map(item=>(
+          <button key={item.id} className={`mobile-nav-item ${page===item.id?'active':''}`} onClick={()=>setPage(item.id)}>
+            <span className="mobile-nav-icon">{item.icon}</span>
+            <span className="mobile-nav-label">{item.label}</span>
+          </button>
+        ))}
+      </div>
       </div>
     </div>
   );
