@@ -1,0 +1,23 @@
+{
+  "name": "brandvoice",
+  "version": "1.0.0",
+  "description": "> **One prompt. Five platforms. Zero agency needed.** > AI-powered social media content generator for coaches, freelancers, small businesses and personal brands.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shalafinesa/brandvoice.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/shalafinesa/brandvoice/issues"
+  },
+  "homepage": "https://github.com/shalafinesa/brandvoice#readme",
+  "dependencies": {
+    "@vercel/speed-insights": "^2.0.0"
+  }
+}
